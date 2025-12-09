@@ -7,6 +7,7 @@ import ForgetPassword from './MyComponents/Authentication/ForgetPassword'
 import ResetPassword from './MyComponents/Authentication/ResetPassword'
 import ChangePassword from './MyComponents/Authentication/ChangePassword'
 import NotFound from './MyComponents/Shared_Components/NotFound'
+import { Toaster } from './components/ui/toaster'
 
 function App() {
  const routes=createBrowserRouter([
@@ -27,7 +28,9 @@ function App() {
     ])
   return (
    <>
+   <Toaster  />
    <RouterProvider router={routes}></RouterProvider>
+
    </>
   )
 }
