@@ -21,3 +21,7 @@ export const resetPasswordSchema = Yup.object({
   email: emailField,
   password: passwordField
 });
+export const changePasswordSchema = Yup.object({
+  password: passwordField,
+  password_new: passwordField
+});
