@@ -8,6 +8,10 @@ import ResetPassword from './MyComponents/Authentication/ResetPassword'
 import ChangePassword from './MyComponents/Authentication/ChangePassword'
 import NotFound from './MyComponents/Shared_Components/NotFound'
 import { Toaster } from './components/ui/toaster'
+import Dashboard from './MyComponents/Dashboard/Dashboard'
+import DashboardLayout from './MyComponents/Dashboard/DashboardLayout'
+import ProtectedRoute from './MyComponents/Shared_Components/ProtectedRoute'
+import { AuthProvider } from './MyComponents/Context/AuthContext'
 
 function App() {
  const routes=createBrowserRouter([
@@ -24,13 +28,28 @@ function App() {
     {path:"/changepassword",element:<ChangePassword/>}
 
   ]
-}
-    ])
+},
+
+{
+      path: "dashboard",
+      element: (
+        // <ProtectedRoute>
+          <DashboardLayout />
+        // </ProtectedRoute>
+      ),
+      children: [
+        { path: "", element: <Dashboard /> },
+      ],
+    },
+  ]);
+
+    
   return (
    <>
+   <AuthProvider>
    <Toaster  />
    <RouterProvider router={routes}></RouterProvider>
-
+</AuthProvider>
    </>
   )
 }
