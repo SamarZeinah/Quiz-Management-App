@@ -25,3 +25,7 @@ export const changePasswordSchema = Yup.object({
   password: passwordField,
   password_new: passwordField
 });
+export const loginSchema = Yup.object({
+  password: passwordField,
+email: emailField,
+});
