@@ -6,3 +6,6 @@ export const Auth_URLS={
     RESET_PASSWORD:`${baseUrl}/auth/reset-password`,
     CHANGE_PASSWORD:`${baseUrl}/auth/change-password`,
 }
+export const Groups_URLS={
+    GET_GROUPS:`${baseUrl}/group`
+}

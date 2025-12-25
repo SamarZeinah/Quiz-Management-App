@@ -12,6 +12,12 @@ import Dashboard from './MyComponents/Dashboard/Dashboard'
 import DashboardLayout from './MyComponents/Dashboard/DashboardLayout'
 import ProtectedRoute from './MyComponents/Shared_Components/ProtectedRoute'
 import { AuthProvider } from './MyComponents/Context/AuthContext'
+import Students from './MyComponents/Students/Students'
+import Questions from './MyComponents/Questions/Questions'
+import Quizzes from './MyComponents/Quizzes/Quizzes'
+import Results from './MyComponents/Results/Results'
+import GroupsList from './MyComponents/Groups/GroupsList'
+import GroupsData from './MyComponents/Groups/GroupsData'
 
 function App() {
  const routes=createBrowserRouter([
@@ -37,8 +43,15 @@ function App() {
           <DashboardLayout />
         // </ProtectedRoute>
       ),
-      children: [
+      children: [ 
         { path: "", element: <Dashboard /> },
+        { path: "students", element: <Students /> },
+        { path: "questions", element: <Questions /> },
+        { path: "groups", element: <GroupsList/> },
+        {path:"groups-data/new-group",element: <GroupsData/>  },
+        {path:"groups-data/:group_id",element: <GroupsData/>  },
+        { path: "quizzes", element: <Quizzes /> },
+        { path: "results", element: <Results /> },
       ],
     },
   ]);
