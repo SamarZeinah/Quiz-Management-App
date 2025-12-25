@@ -15,6 +15,13 @@ interface LoginValues {
   password: string;
 }
 
+interface User {
+  id: number;
+  email: string;
+  role: string;
+}
+
+
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -28,9 +35,18 @@ export default function Login() {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const res = await axios.post(Auth_URLS.LOGIN, values);
 
-        login(res.data.token, res.data.user);
+const res = await axios.post(Auth_URLS.LOGIN, values);
+
+const { accessToken, profile } = res.data.data;
+
+
+localStorage.setItem("token", accessToken);
+localStorage.setItem("user", JSON.stringify(profile));
+
+// ✅ تحديث الـ context
+login(accessToken, profile);
+
 
         toast({
           title: "Login Successfully",
