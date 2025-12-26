@@ -48,7 +48,7 @@ function App() {
         { path: "students", element: <Students /> },
         { path: "questions", element: <Questions /> },
         { path: "groups", element: <GroupsList/> },
-        {path:"/new-group",element: <GroupsData/>  },
+        {path:"new-group",element: <GroupsData/>  },
         {path:"groups-data/:group_id",element: <GroupsData/>  },
         { path: "quizzes", element: <Quizzes /> },
         { path: "results", element: <Results /> },
