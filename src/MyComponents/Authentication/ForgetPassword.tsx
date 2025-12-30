@@ -28,6 +28,8 @@ const ForgetPassword = () => {
           title: "Email Sent Successfully",
           description: "Please check your inbox to reset your password.",
           variant: "success",
+          duration: 1500,
+
         });
         navigate("/resetpassword");
       } catch (error) {
@@ -38,6 +40,7 @@ const ForgetPassword = () => {
             description:
               error.response?.data?.message || "Something went wrong",
             variant: "destructive",
+            duration: 1500,
           });
         } else {
           console.log("Unexpected Error:", error);

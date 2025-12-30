@@ -30,6 +30,7 @@ const ResetPassword = () => {
           description:
             "Your password has been updated. You can now log in with your new password.",
           variant: "success",
+          duration: 1500,
         });
 
         navigate("/login");
@@ -41,6 +42,7 @@ const ResetPassword = () => {
             description:
               error.response?.data?.message || "Something went wrong",
             variant: "destructive",
+            duration: 1500,
           });
         } else {
           console.log("Unexpected Error:", error);
