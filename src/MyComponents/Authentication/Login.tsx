@@ -50,6 +50,7 @@ login(accessToken, profile);
 
         toast({
           title: "Login Successfully",
+          duration: 1500,
         });
 
         navigate("/dashboard");
@@ -60,6 +61,7 @@ login(accessToken, profile);
             description:
               error.response?.data?.message || "Something went wrong",
             variant: "destructive",
+            duration: 1500,
           });
         }
       } finally {

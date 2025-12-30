@@ -7,5 +7,7 @@ export const Auth_URLS={
     CHANGE_PASSWORD:`${baseUrl}/auth/change-password`,
 }
 export const Groups_URLS={
-    GET_GROUPS:`${baseUrl}/group`
+    GET_GROUPS:`${baseUrl}/group`,
+    DELETE_GROUPS:(id:string)=>`${baseUrl}/group/${id}`
+
 }

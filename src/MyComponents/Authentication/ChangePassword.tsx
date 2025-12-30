@@ -32,6 +32,7 @@ const ChangePassword = () => {
           title: "Password Changed Successfully",
           description: "Your password has been updated successfully.",
           variant: "success",
+          duration: 1500,
         });
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -41,6 +42,7 @@ const ChangePassword = () => {
             description:
               error.response?.data?.message || "Something went wrong",
             variant: "destructive",
+            duration: 1500,
           });
         } else {
           console.log("Unexpected Error:", error);
