@@ -21,6 +21,9 @@ import { Groups_URLS } from "../Services/Urls";
 import { DeleteConfirmation } from "../Shared_Components/DeleteConfirmation";
 import { toast } from "@/hooks/use-toast";
 import PacmanLoader from "react-spinners/PacmanLoader";
+import { useNavigate } from "react-router-dom";
+import GroupModal from "./GroupModal ";
+
 type GroupData = {
   _id: string;
   name: string;
@@ -34,6 +37,11 @@ type GroupData = {
 const GroupsList = () => {
   const [groups, setGroups] = useState<GroupData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState(false);
+const [selectedGroup, setSelectedGroup] = useState<GroupData | null>(null);
+
+    const navigate=useNavigate();
+
   // fetchGroupData
   const fetchGroupData = async () => {
     try {
@@ -89,10 +97,18 @@ const GroupsList = () => {
     <div className="container mx-auto p-4">
       {/* Add Group Button */}
       <div className="flex justify-end mb-5">
-        <Button className="flex items-center gap-2 rounded-full px-6 py-3">
+        
+        <Button
+          className="flex items-center gap-2 rounded-full px-6 py-3"
+          onClick={() => {
+            setSelectedGroup(null); 
+            setOpenModal(true);
+          }}
+        >
           <CirclePlus className="w-6 h-6" />
           Add Group
         </Button>
+
       </div>
 
       {/* Groups Grid */}
@@ -156,9 +172,14 @@ const GroupsList = () => {
               <CardFooter className="flex flex-row gap-4 justify-end">
                 <div className="flex items-center gap-1 text-blue-600">
                   <SquarePen className="w-4 h-4" />
-                  <Button className="p-0 text-blue-600 bg-transparent border-0 shadow-none">
+                  <Button className="p-0 text-blue-600 bg-transparent border-0 shadow-none"
+                  onClick={() => {
+                      setSelectedGroup(group);
+                      setOpenModal(true);
+                    }}>
                     Edit
                   </Button>
+                
                 </div>
 
                 <DeleteConfirmation
@@ -180,8 +201,19 @@ const GroupsList = () => {
           ))
         )}
       </div>
-    </div>
+    
+ 
+<GroupModal
+  openModal={openModal}
+  setOpenModal={setOpenModal}
+  selectedGroup={selectedGroup}
+  onClose={() => fetchGroupData()}
+  
+/>
+
+</div>
   );
+
 };
 
 export default GroupsList;

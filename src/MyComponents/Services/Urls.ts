@@ -8,6 +8,11 @@ export const Auth_URLS={
 }
 export const Groups_URLS={
     GET_GROUPS:`${baseUrl}/group`,
-    DELETE_GROUPS:(id:string)=>`${baseUrl}/group/${id}`
+    DELETE_GROUPS:(id:string)=>`${baseUrl}/group/${id}`,
+    CREATE_GROUP:`${baseUrl}/group`,
+
+}
+export const Students_URLS={
+    GET_ALLWITHOUTGROUP:`${baseUrl}/student/without-group`,
 
 }
