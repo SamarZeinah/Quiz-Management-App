@@ -10,9 +10,11 @@ export const Groups_URLS={
     GET_GROUPS:`${baseUrl}/group`,
     DELETE_GROUPS:(id:string)=>`${baseUrl}/group/${id}`,
     CREATE_GROUP:`${baseUrl}/group`,
+    UPDATE_GROUP:( groupId: string) =>`${baseUrl}/group/${groupId}`
 
 }
 export const Students_URLS={
     GET_ALLWITHOUTGROUP:`${baseUrl}/student/without-group`,
+    GET_ALL_STUDENTS:`${baseUrl}/student`,
 
 }

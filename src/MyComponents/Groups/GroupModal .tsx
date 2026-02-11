@@ -49,89 +49,178 @@ const GroupModal = ({
   const [studentsWithoutGroup, setStudentsWithoutGroup] = useState<Student[]>(
     [],
   );
+  const [studentsGroup, setStudentsGroup] = useState<Student[]>([]);
   const [selectedStudents, setSelectedStudents] = useState<Student[]>([]);
+  const [availableStudents, setAvailableStudents] = useState<Student[]>([]);
   const [groupName, setGroupName] = useState(selectedGroup?.name || "");
   const [isSaving, setIsSaving] = useState(false);
-  const [groups, setGroups] = useState<GroupData[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
 
-  // fetch students without group
+  // Fetch students not in any group
   const StudentswithOutGroup = async () => {
     try {
       const res = await axios.get(Students_URLS.GET_ALLWITHOUTGROUP, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setStudentsWithoutGroup(res.data);
-      console.log("Students Data:", res.data);
     } catch (error) {
       console.error("Failed to fetch students:", error);
     }
   };
-  //CreateGroup
+
+  // Fetch all students
+  const GetAllStudentsGroup = async () => {
+    try {
+      const res = await axios.get(Students_URLS.GET_ALL_STUDENTS, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      setStudentsGroup(res.data);
+    } catch (error) {
+      console.error("Failed to fetch students:", error);
+    }
+  };
+
+  // Create new group
   const CreateGroup = async () => {
+    if (selectedStudents.length === 0) {
+    toast({
+      title: "Error",
+      description: "Please select at least one student",
+      variant: "destructive",
+      duration: 1500,
+    });
+    return;
+  }
     setIsSaving(true);
     const payload = {
       name: groupName,
       students: selectedStudents.map((s) => s._id),
     };
-
     try {
-      const res = await axios.post(Groups_URLS.CREATE_GROUP, payload, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+      await axios.post(Groups_URLS.CREATE_GROUP, payload, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-      console.log("Group saved:", res.data);
-      onClose?.();
-      StudentswithOutGroup();
-      setOpenModal(false);
       toast({
         title: "Group Created Successfully",
-        description: "Your Group has been Created successfully.",
         variant: "success",
         duration: 1500,
       });
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log("Axios Error:", error.response?.data);
-        toast({
-          title: "Error",
-          description: error.response?.data?.message || "Something went wrong",
-          variant: "destructive",
-          duration: 1500,
-        });
-      } else {
-        console.log("Unexpected Error:", error);
-      }
+      onClose?.();
+      setOpenModal(false);
+      StudentswithOutGroup();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error?.response?.data?.message || "Something went wrong",
+        variant: "destructive",
+        duration: 1500,
+      });
     } finally {
       setIsSaving(false);
     }
   };
 
-  useEffect(() => {
-    if (openModal) {
-      StudentswithOutGroup();
-    }
-  }, [openModal]);
-
-  const toggleStudent = (student: Student) => {
-    const exists = selectedStudents.find((s) => s._id === student._id);
-    if (exists) {
-      setSelectedStudents(
-        selectedStudents.filter((s) => s._id !== student._id),
-      );
-    } else {
-      setSelectedStudents([...selectedStudents, student]);
+  // Update existing group
+  const UpdateGroup = async () => {
+    if (!selectedGroup) return;
+    setIsSaving(true);
+    const payload = {
+      name: groupName,
+      students: selectedStudents.map((s) => s._id),
+    };
+    try {
+      await axios.put(Groups_URLS.UPDATE_GROUP(selectedGroup._id), payload, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      toast({
+        title: "Group Updated Successfully",
+        variant: "success",
+        duration: 1500,
+      });
+      onClose?.();
+      setOpenModal(false);
+      GetAllStudentsGroup();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error?.response?.data?.message || "Something went wrong",
+        variant: "destructive",
+        duration: 1500,
+      });
+    } finally {
+      setIsSaving(false);
     }
   };
+
+  // Load students when modal opens
+  useEffect(() => {
+    if (!openModal) return;
+
+    const fetchData = async () => {
+      try {
+        // combine the two requests at the same time
+        const [withoutGroupRes, allStudentsRes] = await Promise.all([
+          axios.get(Students_URLS.GET_ALLWITHOUTGROUP, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }),
+          axios.get(Students_URLS.GET_ALL_STUDENTS, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }),
+        ]);
+
+        const withoutGroup = withoutGroupRes.data as Student[];
+        const allStudents = allStudentsRes.data as Student[];
+
+        setStudentsWithoutGroup(withoutGroup);
+        setStudentsGroup(allStudents);
+
+        // Selected Students
+        const selected = selectedGroup
+          ? allStudents.filter((s: Student) =>
+              selectedGroup.students.includes(s._id),
+            )
+          : [];
+        setSelectedStudents(selected);
+
+        // Students avilabel for Combobox
+        const combined = selectedGroup
+          ? [...withoutGroup, ...selected]
+          : withoutGroup;
+        setAvailableStudents(combined);
+      } catch (error) {
+        console.error("Failed to fetch students:", error);
+      }
+    };
+
+    fetchData();
+  }, [openModal, selectedGroup]);
+
+  // Set selected students and available students after data loads
   useEffect(() => {
     if (openModal) {
-      setSelectedStudents([]);
       setGroupName(selectedGroup?.name || "");
+
+      const selected = selectedGroup
+        ? studentsGroup.filter((s) => selectedGroup.students.includes(s._id))
+        : [];
+
+      setSelectedStudents(selected);
+
+      const combined = selectedGroup
+        ? [
+            ...studentsWithoutGroup,
+            ...studentsGroup.filter((s) =>
+              selectedGroup.students.includes(s._id),
+            ),
+          ]
+        : studentsWithoutGroup;
+
+      setAvailableStudents(combined);
     }
-  }, [openModal, selectedGroup]);
+  }, [openModal, studentsWithoutGroup, studentsGroup, selectedGroup]);
 
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
@@ -149,14 +238,18 @@ const GroupModal = ({
           <label className="text-sm font-medium">Group Name</label>
           <Input
             placeholder="Group Name"
-            defaultValue={selectedGroup?.name || ""}
+            value={groupName}
             onChange={(e) => setGroupName(e.target.value)}
           />
-          <label className="text-sm font-medium">Select Students</label>
 
+          <label className="text-sm font-medium">Select Students</label>
           <ComboboxMultiple
-            key={selectedGroup?._id || "new"}
-            items={studentsWithoutGroup}
+            key={
+              selectedGroup?._id +
+              "-" +
+              selectedStudents.map((s) => s._id).join("-")
+            }
+            items={availableStudents}
             defaultValues={selectedStudents}
             onValueChange={(values) => setSelectedStudents(values)}
           />
@@ -166,12 +259,17 @@ const GroupModal = ({
           <Button variant="outline" onClick={() => setOpenModal(false)}>
             Cancel
           </Button>
-
           <Button
             className="bg-green-600 text-white hover:bg-green-700"
-            onClick={CreateGroup}
+            onClick={selectedGroup ? UpdateGroup : CreateGroup}
           >
-            {isSaving ? "Saving..." : selectedGroup ? "Update" : "Save"}
+            {isSaving
+              ? selectedGroup
+                ? "Updating..."
+                : "Saving..."
+              : selectedGroup
+                ? "Update"
+                : "Save"}
           </Button>
         </DialogFooter>
       </DialogContent>
