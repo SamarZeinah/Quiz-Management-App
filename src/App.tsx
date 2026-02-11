@@ -17,7 +17,7 @@ import Questions from './MyComponents/Questions/Questions'
 import Quizzes from './MyComponents/Quizzes/Quizzes'
 import Results from './MyComponents/Results/Results'
 import GroupsList from './MyComponents/Groups/GroupsList'
-import GroupsData from './MyComponents/Groups/GroupsData'
+import GroupsData from './MyComponents/Groups/GroupModal '
 
 function App() {
  const routes=createBrowserRouter([
@@ -47,9 +47,17 @@ function App() {
         { path: "", element: <Dashboard /> },
         { path: "students", element: <Students /> },
         { path: "questions", element: <Questions /> },
-        { path: "groups", element: <GroupsList/> },
-        {path:"new-group",element: <GroupsData/>  },
-        {path:"groups-data/:group_id",element: <GroupsData/>  },
+        { 
+      path: "groups", 
+      element: <GroupsList />,
+      children: [
+        { path: "data/new-group", element: <GroupsData /> },
+        { path: "data/:group_id", element: <GroupsData /> },
+      ]
+    },
+        // { path: "groups", element: <GroupsList/> },
+        // {path:"groups-data/new-group",element: <GroupsData/>  },
+        // {path:"groups-data/:group_id",element: <GroupsData/>  },
         { path: "quizzes", element: <Quizzes /> },
         { path: "results", element: <Results /> },
       ],
