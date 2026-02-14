@@ -17,7 +17,6 @@ import Questions from './MyComponents/Questions/Questions'
 import Quizzes from './MyComponents/Quizzes/Quizzes'
 import Results from './MyComponents/Results/Results'
 import GroupsList from './MyComponents/Groups/GroupsList'
-import GroupsData from './MyComponents/Groups/GroupModal '
 
 function App() {
  const routes=createBrowserRouter([

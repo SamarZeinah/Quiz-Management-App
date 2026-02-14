@@ -13,33 +13,8 @@ import axios from "axios";
 import { Groups_URLS, Students_URLS } from "../Services/Urls";
 import { ComboboxMultiple } from "@/components/ui/ComboboxMultiple";
 import { toast } from "@/hooks/use-toast";
-
-type Student = {
-  _id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  status: string;
-  role: string;
-};
-
-type GroupData = {
-  _id: string;
-  name: string;
-  status: "Active" | "Inactive";
-  instructor: string;
-  students: string[];
-  max_students: number;
-  footer: string;
-};
-
-type GroupModalProps = {
-  openModal: boolean;
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedGroup: GroupData | null;
-  onClose?: () => void;
-};
-
+import type { Student } from "@/Interfaces/GroupInterfaces";
+import type {GroupModalProps } from "@/Interfaces/GroupInterfaces";
 const GroupModal = ({
   openModal,
   setOpenModal,

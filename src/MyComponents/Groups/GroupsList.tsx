@@ -23,17 +23,7 @@ import { toast } from "@/hooks/use-toast";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import { useNavigate } from "react-router-dom";
 import GroupModal from "./GroupModal ";
-
-type GroupData = {
-  _id: string;
-  name: string;
-  status: "Active" | "Inactive";
-  instructor: string;
-  students: string[];
-  max_students: number;
-  footer: string;
-};
-
+import type { GroupData } from "@/Interfaces/GroupInterfaces";
 const GroupsList = () => {
   const [groups, setGroups] = useState<GroupData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);

@@ -10,17 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ChevronDown, KeyRound, LogOut } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-
-interface NavbarProps {
-  pageTitle: string
-  
-}
-
-interface User {
-  first_name?: string
-  last_name?: string
-  role?: string
-}
+import type { NavbarProps, User } from "@/Interfaces/NavbarInterfaces"
 
 export function Navbar({ pageTitle }: NavbarProps) {
   const [user, setUser] = useState<User | null>(null)
