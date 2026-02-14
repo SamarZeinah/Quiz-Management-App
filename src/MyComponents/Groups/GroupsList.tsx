@@ -29,7 +29,7 @@ const GroupsList = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false);
 const [selectedGroup, setSelectedGroup] = useState<GroupData | null>(null);
-
+const [deleteOpen, setDeleteOpen] = useState(false);
     const navigate=useNavigate();
 
   // fetchGroupData
@@ -80,6 +80,9 @@ const [selectedGroup, setSelectedGroup] = useState<GroupData | null>(null);
           duration: 1500,
         });
       }
+      finally {
+      setDeleteOpen(false); 
+    }
     }
   };
 
@@ -171,21 +174,14 @@ const [selectedGroup, setSelectedGroup] = useState<GroupData | null>(null);
                   </Button>
                 
                 </div>
+                    <Button className="p-0 text-red-600 bg-transparent border-0 shadow-none"
+                    onClick={()=>{
+                      setSelectedGroup(group);
+                    setDeleteOpen(true);
 
-                <DeleteConfirmation
-                  trigger={
-                    <Button className="p-0 text-red-600 bg-transparent border-0 shadow-none">
+                    }}>
                       <Trash2 className="w-4 h-4" /> Delete
                     </Button>
-                  }
-                  title="Delete Group"
-                  description={`Are you sure you want to delete ${group.name} Group?`}
-                  confirmText="Delete"
-                  cancelText="Cancel"
-                  onConfirm={async () => {
-                    await handleDeleteGroup(group._id);
-                  }}
-                />
               </CardFooter>
             </Card>
           ))
@@ -200,6 +196,17 @@ const [selectedGroup, setSelectedGroup] = useState<GroupData | null>(null);
   onClose={() => fetchGroupData()}
   
 />
+<DeleteConfirmation
+        open={deleteOpen}                
+        onOpenChange={setDeleteOpen}
+      title="Delete Group"
+      description={`Are you sure you want to delete ${selectedGroup?.name} Group?`}
+      confirmText="Delete"
+      cancelText="Cancel"
+      onConfirm={async () => {
+        await handleDeleteGroup(selectedGroup?._id || "");
+      }}
+    />
 
 </div>
   );
