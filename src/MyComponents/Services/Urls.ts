@@ -16,5 +16,8 @@ export const Groups_URLS={
 export const Students_URLS={
     GET_ALLWITHOUTGROUP:`${baseUrl}/student/without-group`,
     GET_ALL_STUDENTS:`${baseUrl}/student`,
+    Delete_Student:(StudentId:string)=>`${baseUrl}/student/${StudentId}`,
+    Delete_Student_From_Group:(StudentId:string,GroupId:string)=>`${baseUrl}/student/${GroupId}/${StudentId}`
+
 
 }
