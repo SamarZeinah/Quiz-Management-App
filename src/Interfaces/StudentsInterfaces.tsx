@@ -19,5 +19,11 @@ export interface Student {
   email: string;
   status: Status;
   role: "Student" | "Instructor";
-  group: Group;
+  group: Group ;
 }
+export interface StudentModalProps  {
+  openModal: boolean;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedStudent: Student | null;
+  onClose?: () => void;
+};
