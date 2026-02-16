@@ -21,7 +21,6 @@ import { Groups_URLS } from "../Services/Urls";
 import { DeleteConfirmation } from "../Shared_Components/DeleteConfirmation";
 import { toast } from "@/hooks/use-toast";
 import PacmanLoader from "react-spinners/PacmanLoader";
-import { useNavigate } from "react-router-dom";
 import GroupModal from "./GroupModal ";
 import type { GroupData } from "@/Interfaces/GroupInterfaces";
 const GroupsList = () => {
@@ -30,7 +29,7 @@ const GroupsList = () => {
   const [openModal, setOpenModal] = useState(false);
 const [selectedGroup, setSelectedGroup] = useState<GroupData | null>(null);
 const [deleteOpen, setDeleteOpen] = useState(false);
-    const navigate=useNavigate();
+    // const navigate=useNavigate();
 
   // fetchGroupData
   const fetchGroupData = async () => {
@@ -57,7 +56,7 @@ const [deleteOpen, setDeleteOpen] = useState(false);
     console.log("Deleting group with ID:", groupId);
     if (groupId) {
       try {
-        const res = await axios.delete(Groups_URLS.DELETE_GROUPS(groupId), {
+         await axios.delete(Groups_URLS.DELETE_GROUPS(groupId), {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -87,7 +86,7 @@ const [deleteOpen, setDeleteOpen] = useState(false);
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-6">
       {/* Add Group Button */}
       <div className="flex justify-end mb-5">
         

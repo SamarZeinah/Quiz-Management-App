@@ -9,18 +9,7 @@ import { toast } from "@/hooks/use-toast";
 import { useAuth } from "../Context/AuthContext";
 import { loginSchema } from "../Services/Validations";
 import { useNavigate } from "react-router-dom";
-
-interface LoginValues {
-  email: string;
-  password: string;
-}
-
-interface User {
-  id: number;
-  email: string;
-  role: string;
-}
-
+import type { LoginValues } from "@/Interfaces/AuthInterfaces";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -32,6 +21,7 @@ export default function Login() {
   const loginFormikOpj = useFormik<LoginValues>({
     initialValues: { email: "", password: "" },
     validationSchema: loginSchema,
+
     onSubmit: async (values) => {
       setLoading(true);
       try {
@@ -44,7 +34,6 @@ const { accessToken, profile } = res.data.data;
 localStorage.setItem("token", accessToken);
 localStorage.setItem("user", JSON.stringify(profile));
 
-// ✅ تحديث الـ context
 login(accessToken, profile);
 
 

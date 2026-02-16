@@ -7,7 +7,7 @@ import {
   CircleX,
   LayoutGrid,
   List,
-  Trash2,
+  
 } from "lucide-react";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import type { Student } from "@/Interfaces/StudentsInterfaces";

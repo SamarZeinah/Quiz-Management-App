@@ -33,7 +33,7 @@ export default function Layout() {
           />
 
           {/* <div className="flex-1 overflow-auto bg-gray-50"> */}
-          <div className="flex-1 overflow-y-auto overflow-x-hidden bg-gray-50">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden bg-gray-50 ">
             <Outlet />
           </div>
         </div>
