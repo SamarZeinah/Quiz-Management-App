@@ -20,10 +20,12 @@ export interface Student {
   status: Status;
   role: "Student" | "Instructor";
   group: Group ;
+  avg_score?: number;
 }
 export interface StudentModalProps  {
   openModal: boolean;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   selectedStudent: Student | null;
   onClose?: () => void;
+  isTopFive?: boolean;
 };

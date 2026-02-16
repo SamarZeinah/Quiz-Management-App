@@ -22,7 +22,7 @@ const ChangePassword = () => {
       console.log(values);
       setLoading(true);
       try {
-        const res = await axios.post(Auth_URLS.CHANGE_PASSWORD, values, {
+        await axios.post(Auth_URLS.CHANGE_PASSWORD, values, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

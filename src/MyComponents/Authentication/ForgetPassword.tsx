@@ -19,7 +19,7 @@ const ForgetPassword = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const res = await axios.post(Auth_URLS.FORGET_PASSWORD, values, {
+         await axios.post(Auth_URLS.FORGET_PASSWORD, values, {
           headers: {
             "Content-Type": "application/json",
           },

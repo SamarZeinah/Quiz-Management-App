@@ -20,7 +20,7 @@ const ResetPassword = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const res = await axios.post(Auth_URLS.RESET_PASSWORD, values, {
+         await axios.post(Auth_URLS.RESET_PASSWORD, values, {
           headers: {
             "Content-Type": "application/json",
           },
