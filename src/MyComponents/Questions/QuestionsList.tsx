@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Questions_URLS } from "../Services/Urls";
 import { useEffect, useState } from "react";
 import type { Question } from "../../Interfaces/QuestionsInterfaces";
@@ -27,6 +27,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { DeleteConfirmation } from "../Shared_Components/DeleteConfirmation";
+import { toast } from "@/hooks/use-toast";
+import QuestionModal from "./QuestionModal";
 const QuestionsList = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   console.log(questions);
@@ -35,6 +38,12 @@ const QuestionsList = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string>("");
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
+    null,
+  );
+  const [deleteOpen, setDeleteOpen] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
+
 
   const handleDifficultySelect = (value: string) => {
     setSelectedDifficulty(value); // حفظ القيمة
@@ -61,6 +70,36 @@ const QuestionsList = () => {
         );
       } else {
         console.log("Unknown Error:", error);
+      }
+    }
+  };
+  // hadeldeleteQuestion
+  const hadeldeleteQuestion = async (questionId: string) => {
+    console.log("Deleting Question with ID:", questionId);
+    if (questionId) {
+      try {
+        await axios.delete(Questions_URLS.DELETE_QUESTION(questionId), {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        getAllQuestions(); // Refresh the list after deletion
+        toast({
+          title: `Question of id ${questionId} delete Successfully`,
+          duration: 1500,
+        });
+      } catch (error) {
+        let description = "Failed to delete Question";
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError<{ message: string }>;
+          description = axiosError.response?.data?.message || description;
+        }
+        toast({
+          title: "Error",
+          description,
+          variant: "destructive",
+          duration: 1500,
+        });
+      } finally {
+        setDeleteOpen(false);
       }
     }
   };
@@ -271,9 +310,22 @@ const QuestionsList = () => {
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     <div className="inline-flex items-center justify-center gap-4 w-full">
-                      <Eye size={24} className="text-blue-600" />
-                      <SquarePen size={24} className="text-yellow-600" />
-                      <Trash2 size={24} className="text-red-600" />
+                      <Eye size={24} className="text-blue-600 cursor-pointer transition-all duration-200 hover:text-blue-800 hover:scale-110" onClick={() => {
+                      setSelectedQuestion(question);
+                      setOpenModal(true);
+                    }} />
+                      <SquarePen size={24} className="text-yellow-600 cursor-pointer transition-all duration-200 hover:text-yellow-800 hover:scale-110" />
+                      <Trash2
+                        size={24}
+                        className="text-red-600 cursor-pointer 
+                        transition-all duration-200 
+                        hover:text-red-800 
+                        hover:scale-110"
+                        onClick={() => {
+                          setSelectedQuestion(question);
+                          setDeleteOpen(true);
+                        }}
+                      />
                     </div>
                   </td>
                 </tr>
@@ -348,6 +400,24 @@ const QuestionsList = () => {
               </PaginationItem>
             </PaginationContent>
           </Pagination>
+          {/* DeleteConfirmation */}
+          <DeleteConfirmation
+            open={deleteOpen}
+            onOpenChange={setDeleteOpen}
+            title="Delete Question"
+            description={`Are you sure you want to delete the question "${selectedQuestion?.title}"?`}
+            confirmText="Delete"
+            cancelText="Cancel"
+            onConfirm={async () => {
+              await hadeldeleteQuestion(selectedQuestion?._id || "");
+            }}
+          />
+          {/* QuestionModal */}
+      <QuestionModal
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        selectedQuestion={selectedQuestion}
+      />
         </div>
       </div>
     </>

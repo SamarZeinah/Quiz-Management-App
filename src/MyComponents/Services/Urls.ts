@@ -40,5 +40,6 @@ export const Quizzes_URLS={
 }
 export const Questions_URLS={
     GET_All_QUESTIONS:`${baseUrl}/question`,
+    DELETE_QUESTION:(QuestionId:string)=>`${baseUrl}/question/${QuestionId}`,
 
 }

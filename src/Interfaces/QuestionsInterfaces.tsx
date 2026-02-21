@@ -17,3 +17,10 @@ export interface Question {
         points: number,
         type: "BE"|"FE"|"DO"
     }
+    export interface QuestionModalProps  {
+      openModal: boolean;
+      setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+      selectedQuestion: Question | null;
+      onClose?: () => void;
+      isTopFive?: boolean;
+    };
