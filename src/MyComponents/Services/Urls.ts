@@ -38,3 +38,7 @@ export const Quizzes_URLS={
     GET_FIRSTFIVEINCOMMING_QUIZZES:`${baseUrl}/quiz/incomming`,
 
 }
+export const Questions_URLS={
+    GET_All_QUESTIONS:`${baseUrl}/question`,
+
+}
