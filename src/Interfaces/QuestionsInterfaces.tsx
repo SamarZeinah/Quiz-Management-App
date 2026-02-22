@@ -30,4 +30,5 @@ export interface QuestionDataProps {
   selectedQuestion: Question | null;
   onClose?: () => void;
   isTopFive?: boolean;
+  getAllQuestions: () => void;
 }

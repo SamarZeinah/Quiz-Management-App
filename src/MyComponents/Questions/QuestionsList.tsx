@@ -15,7 +15,6 @@ import {
   ChevronDown,
   CirclePlus,
   Eye,
-  Plus,
   SquarePen,
   Trash2,
 } from "lucide-react";
@@ -109,7 +108,10 @@ const QuestionsList = () => {
   }, []);
   // filteredStudents dedend on name
   const filteredQuestions = questions.filter((question) => {
-    const matchesSearch = question.title.includes(searchValue.toLowerCase());
+    // const matchesSearch = question.title.includes(searchValue.toLowerCase());
+    const matchesSearch = question.title
+  .toLowerCase()
+  .includes(searchValue.toLowerCase());
     const matchesDifficulty = selectedDifficulty
       ? question.difficulty === selectedDifficulty
       : true;
