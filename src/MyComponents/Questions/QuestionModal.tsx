@@ -22,7 +22,6 @@ const QuestionModal = ({
             <DialogDescription>
               {" "}
               View question details and its options
-              
             </DialogDescription>
           )}
         </DialogHeader>

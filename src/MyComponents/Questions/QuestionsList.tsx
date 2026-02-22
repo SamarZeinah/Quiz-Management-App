@@ -15,7 +15,6 @@ import {
   ChevronDown,
   CirclePlus,
   Eye,
-  Plus,
   SquarePen,
   Trash2,
 } from "lucide-react";
@@ -29,6 +28,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { DeleteConfirmation } from "../Shared_Components/DeleteConfirmation";
 import { toast } from "@/hooks/use-toast";
+import QuestionData from "./QuestionData";
 import QuestionModal from "./QuestionModal";
 const QuestionsList = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -42,8 +42,8 @@ const QuestionsList = () => {
     null,
   );
   const [deleteOpen, setDeleteOpen] = useState(false);
-    const [openModal, setOpenModal] = useState(false);
-
+  const [openModal, setOpenModal] = useState(false);
+  const [openQuestionData, setOpenQuestionData] = useState(false);
 
   const handleDifficultySelect = (value: string) => {
     setSelectedDifficulty(value); // حفظ القيمة
@@ -108,7 +108,10 @@ const QuestionsList = () => {
   }, []);
   // filteredStudents dedend on name
   const filteredQuestions = questions.filter((question) => {
-    const matchesSearch = question.title.includes(searchValue.toLowerCase());
+    // const matchesSearch = question.title.includes(searchValue.toLowerCase());
+    const matchesSearch = question.title
+  .toLowerCase()
+  .includes(searchValue.toLowerCase());
     const matchesDifficulty = selectedDifficulty
       ? question.difficulty === selectedDifficulty
       : true;
@@ -138,6 +141,10 @@ const QuestionsList = () => {
           <Button
             className="group flex items-center gap-3 bg-gray-800 text-white rounded-full px-6 py-6 text-lg font-semibold shadow-md shadow-gray-700
                    hover:bg-gray-700 hover:scale-105 transition-all duration-200"
+            onClick={() => {
+              setSelectedQuestion(null);
+              setOpenQuestionData(true);
+            }}
           >
             <CirclePlus className="w-8 h-8 transition-transform duration-200 group-hover:rotate-90" />
             Add Question
@@ -310,11 +317,22 @@ const QuestionsList = () => {
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     <div className="inline-flex items-center justify-center gap-4 w-full">
-                      <Eye size={24} className="text-blue-600 cursor-pointer transition-all duration-200 hover:text-blue-800 hover:scale-110" onClick={() => {
-                      setSelectedQuestion(question);
-                      setOpenModal(true);
-                    }} />
-                      <SquarePen size={24} className="text-yellow-600 cursor-pointer transition-all duration-200 hover:text-yellow-800 hover:scale-110" />
+                      <Eye
+                        size={24}
+                        className="text-blue-600 cursor-pointer transition-all duration-200 hover:text-blue-800 hover:scale-110"
+                        onClick={() => {
+                          setSelectedQuestion(question);
+                          setOpenModal(true);
+                        }}
+                      />
+                      <SquarePen
+                        size={24}
+                        className="text-yellow-600 cursor-pointer transition-all duration-200 hover:text-yellow-800 hover:scale-110"
+                        onClick={() => {
+                          setSelectedQuestion(question);
+                          setOpenQuestionData(true);
+                        }}
+                      />
                       <Trash2
                         size={24}
                         className="text-red-600 cursor-pointer 
@@ -413,11 +431,18 @@ const QuestionsList = () => {
             }}
           />
           {/* QuestionModal */}
-      <QuestionModal
-        openModal={openModal}
-        setOpenModal={setOpenModal}
-        selectedQuestion={selectedQuestion}
-      />
+          <QuestionModal
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+            selectedQuestion={selectedQuestion}
+          />
+          {/* QuestionData */}
+          <QuestionData
+            openQuestionData={openQuestionData}
+            setOpenQuestionData={setOpenQuestionData}
+            selectedQuestion={selectedQuestion}
+            getAllQuestions={getAllQuestions}
+          />
         </div>
       </div>
     </>
