@@ -23,6 +23,7 @@ const isTopFive = TopFiveStudents.some(s => s._id === selectedStudent?._id);
     { bg: "bg-red-100", text: "text-red-800" },
     { bg: "bg-yellow-100", text: "text-yellow-800" },
     { bg: "bg-purple-100", text: "text-purple-800" },
+    
   ];
 
   function getColor(index: number) {
@@ -96,7 +97,13 @@ const isTopFive = TopFiveStudents.some(s => s._id === selectedStudent?._id);
           <div className="flex justify-center items-center h-40 bg-white shadow-md rounded-lg">
             <OrbitLoader size={40} />
           </div>
-        ) : (
+        ): FirstFiveIncommingQuizzes.length === 0 ? (
+  <div className="flex justify-center items-center h-40 bg-white shadow-md rounded-lg">
+    <p className="text-gray-500 text-lg font-semibold">
+      No Upcoming Quizzes
+    </p>
+  </div>
+)  : (
           <div className="space-y-4">
             {FirstFiveIncommingQuizzes.map((quiz) => (
               <div
@@ -132,7 +139,7 @@ const isTopFive = TopFiveStudents.some(s => s._id === selectedStudent?._id);
 
         <p
           className="text-lg italic font-semibold mb-4 flex items-center gap-2 mt-4 cursor-pointer group"
-          onClick={() => Navigate("/dashboard/students")}
+          onClick={() => Navigate("/dashboard/quizzes")}
         >
           <span className="transition-transform duration-300 group-hover:translate-x-2">
             View Quiz directory
