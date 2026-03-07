@@ -14,7 +14,7 @@ import ProtectedRoute from './MyComponents/Shared_Components/ProtectedRoute'
 import { AuthProvider } from './MyComponents/Context/AuthContext'
 import Students from './MyComponents/Students/Students'
 import QuestionsList from './MyComponents/Questions/QuestionsList'
-import Quizzes from './MyComponents/Quizzes/Quizzes'
+import Quizzes from './MyComponents/Quizzes/QuizzesList'
 import Results from './MyComponents/Results/Results'
 import GroupsList from './MyComponents/Groups/GroupsList'
 

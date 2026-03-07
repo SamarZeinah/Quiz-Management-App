@@ -36,6 +36,8 @@ export const Students_URLS={
 }
 export const Quizzes_URLS={
     GET_FIRSTFIVEINCOMMING_QUIZZES:`${baseUrl}/quiz/incomming`,
+    LAST_FIVE_COMPELETE:`${baseUrl}/quiz/completed`,
+    FIRST_FIVE_INCOMMING:`${baseUrl}/quiz/incomming`
 
 }
 export const Questions_URLS={
