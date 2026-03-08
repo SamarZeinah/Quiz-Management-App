@@ -22,3 +22,10 @@ export interface Quiz {
   participants: number;
 }
 export type QuizResponse = Quiz[];
+
+export interface QuizDataProps {
+  openQuizData: boolean;
+  setOpenQuizData: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose?: () => void;
+  
+}

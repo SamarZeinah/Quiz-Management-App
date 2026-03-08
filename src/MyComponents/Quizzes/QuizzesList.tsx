@@ -6,30 +6,37 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import PacmanLoader from "react-spinners/PacmanLoader";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Quizzes_URLS } from "../Services/Urls";
 import { toast } from "@/hooks/use-toast";
 import type { Quiz } from "@/Interfaces/QuizzesInterfaces";
 import {
+  BookOpen,
   CircleCheckBig,
   ClipboardListIcon,
   ClockIcon,
   Eye,
-  SquarePen,
+  Plus,
   StarIcon,
   Trash2,
   Users,
   XCircleIcon,
 } from "lucide-react";
 import OrbitLoader from "../Shared_Components/OrbitLoader";
+import { useNavigate } from "react-router-dom";
+import QuizzesData from "./QuizzesData";
+import { DeleteConfirmation } from "../Shared_Components/DeleteConfirmation";
 const QuizzesList = () => {
-  const [loading, setLoading] = useState<boolean>(false);
   const [loadingCompleted, setLoadingCompleted] = useState(true);
   const [loadingIncoming, setLoadingIncoming] = useState(true);
   const [lastFiveCompleted, setlastFiveComplete] = useState<Quiz[]>([]);
   const [FirstFiveIncomming, setFirstFiveIncomming] = useState<Quiz[]>([]);
-
+    const [openQuizData, setOpenQuizData] = useState(false);
+ const [selectedQuiz, setSelectedQuiz] = useState<Quiz | null>(
+    null,
+  );
+  const [deleteOpen, setDeleteOpen] = useState(false);
+const Navigate=useNavigate();
   console.log("lastFiveCompleted", lastFiveCompleted);
   // GetlastFiveCompleted
   const GetLastFiveCompleted = async () => {
@@ -81,12 +88,101 @@ const QuizzesList = () => {
       }
     }
   };
-  useEffect(() => {
+  
+// const hadeldeleteQuiz = async (quizId: string) => {
+//     console.log("Deleting Question with ID:", quizId);
+//     if (quizId) {
+//       try {
+//         await axios.delete(Quizzes_URLS.DELETE_QUIZ(quizId), {
+//           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+//         });
+//         GetFirstFiveIncomming(); // Refresh the list after deletion
+//         toast({
+//           title: `Quiz of id ${quizId} delete Successfully`,
+//           duration: 1500,
+//         });
+//       } catch (error) {
+//         let description = "Failed to delete Question";
+//         if (axios.isAxiosError(error)) {
+//           const axiosError = error as AxiosError<{ message: string }>;
+//           description = axiosError.response?.data?.message || description;
+//         }
+//         toast({
+//           title: "Error",
+//           description,
+//           variant: "destructive",
+//           duration: 1500,
+//         });
+//       } finally {
+//         setDeleteOpen(false);
+//       }
+//     }
+//   };
+const hadeldeleteQuiz = async (quizId: string) => {
+  console.log("Deleting Question with ID:", quizId);
+  if (quizId) {
+    try {
+      await axios.delete(Quizzes_URLS.DELETE_QUIZ(quizId), {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+
+      // حدّث المصفوفة محليًا بدون loader
+      setFirstFiveIncomming((prev) =>
+        prev.filter((quiz) => quiz._id !== quizId)
+      );
+
+      toast({
+        title: `Quiz of id ${quizId} deleted Successfully`,
+        duration: 1500,
+      });
+    } catch (error) {
+      let description = "Failed to delete Question";
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<{ message: string }>;
+        description = axiosError.response?.data?.message || description;
+      }
+      toast({
+        title: "Error",
+        description,
+        variant: "destructive",
+        duration: 1500,
+      });
+    } finally {
+      setDeleteOpen(false);
+    }
+  }
+};  
+useEffect(() => {
     GetLastFiveCompleted();
     GetFirstFiveIncomming();
   }, []);
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-7">
+      <div className="flex gap-4 mb-4">
+        <div className="group w-48 h-44 bg-gray-800 rounded-lg shadow-2xl flex flex-col items-center justify-center gap-3 text-center transition-all duration-300 hover:scale-105 hover:border hover:border-gray-600/50"
+         onClick={() => {
+              setOpenQuizData(true);
+            }}>
+          <div className="bg-gray-700/20 p-4 rounded-lg transition text-white group-hover:bg-gray-700/60">
+            <Plus />
+          </div>
+
+          <h1 className="text-white font-bold text-md">Create New Quiz</h1>
+
+          <p className="text-gray-300 text-sm">Set Up Interactive Quizzes</p>
+        </div>
+
+        <div  className="group w-48 h-44 bg-gray-800 rounded-lg shadow-2xl flex flex-col items-center justify-center gap-3 text-center transition-all duration-300 hover:scale-105 hover:border hover:border-gray-600/50 hover:cursor-pointer"
+        onClick={()=>Navigate("/dashboard/questions")}>
+          <div className="bg-gray-700/20 p-4 rounded-lg transition text-white group-hover:bg-gray-700/60">
+            <BookOpen />
+          </div>
+
+          <h1 className="text-white font-bold text-md">Question Bank</h1>
+
+          <p className="text-gray-300 text-sm">Manage Your questions</p>
+        </div>
+      </div>
       <h2 className="text-2xl font-bold mb-4 text-[#111827]">
         Completed Quizzes
       </h2>
@@ -264,8 +360,8 @@ const QuizzesList = () => {
                         size={24}
                         className="text-red-600 cursor-pointer transition-all duration-200 hover:text-red-800 hover:scale-110"
                         onClick={() => {
-                          // setSelectedQuestion(quiz);
-                          // setDeleteOpen(true);
+                          setSelectedQuiz(quiz);
+                          setDeleteOpen(true);
                         }}
                       />
                     </div>
@@ -276,7 +372,25 @@ const QuizzesList = () => {
           </table>
         )}
       </div>
+       <QuizzesData
+            openQuizData={openQuizData}
+            setOpenQuizData={setOpenQuizData}
+          />
+           {/* DeleteConfirmation */}
+          <DeleteConfirmation
+            open={deleteOpen}
+            onOpenChange={setDeleteOpen}
+            title="Delete Quiz"
+            description={`Are you sure you want to delete the Quiz "${selectedQuiz?.title}"?`}
+            confirmText="Delete"
+            cancelText="Cancel"
+            onConfirm={async () => {
+              await hadeldeleteQuiz(selectedQuiz?._id || "");
+            }}
+          />
+          
     </div>
+    
   );
 };
 

@@ -37,7 +37,9 @@ export const Students_URLS={
 export const Quizzes_URLS={
     GET_FIRSTFIVEINCOMMING_QUIZZES:`${baseUrl}/quiz/incomming`,
     LAST_FIVE_COMPELETE:`${baseUrl}/quiz/completed`,
-    FIRST_FIVE_INCOMMING:`${baseUrl}/quiz/incomming`
+    FIRST_FIVE_INCOMMING:`${baseUrl}/quiz/incomming`,
+    CREATE_QUIZ:`${baseUrl}/quiz`,
+    DELETE_QUIZ:(QuizId:string)=>`${baseUrl}/quiz/${QuizId}`
 
 }
 export const Questions_URLS={
