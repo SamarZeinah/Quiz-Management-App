@@ -39,7 +39,10 @@ export const Quizzes_URLS={
     LAST_FIVE_COMPELETE:`${baseUrl}/quiz/completed`,
     FIRST_FIVE_INCOMMING:`${baseUrl}/quiz/incomming`,
     CREATE_QUIZ:`${baseUrl}/quiz`,
-    DELETE_QUIZ:(QuizId:string)=>`${baseUrl}/quiz/${QuizId}`
+    DELETE_QUIZ:(QuizId:string)=>`${baseUrl}/quiz/${QuizId}`,
+    GET_ALL_QUIZZES:`${baseUrl}/quiz`,
+        GET_ALL_RESULTS:`${baseUrl}/quiz/result`,
+
 
 }
 export const Questions_URLS={
