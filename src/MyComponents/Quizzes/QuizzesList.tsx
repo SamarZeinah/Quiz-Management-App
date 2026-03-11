@@ -26,6 +26,7 @@ import OrbitLoader from "../Shared_Components/OrbitLoader";
 import { useNavigate } from "react-router-dom";
 import QuizzesData from "./QuizzesData";
 import { DeleteConfirmation } from "../Shared_Components/DeleteConfirmation";
+import QuizModal from "./QuizModal";
 const QuizzesList = () => {
   const [loadingCompleted, setLoadingCompleted] = useState(true);
   const [loadingIncoming, setLoadingIncoming] = useState(true);
@@ -36,6 +37,8 @@ const QuizzesList = () => {
     null,
   );
   const [deleteOpen, setDeleteOpen] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
+
 const Navigate=useNavigate();
   console.log("lastFiveCompleted", lastFiveCompleted);
   // GetlastFiveCompleted
@@ -352,9 +355,9 @@ useEffect(() => {
                         size={24}
                         className="text-blue-600 cursor-pointer transition-all duration-200 hover:text-blue-800 hover:scale-110"
                         onClick={() => {
-                          // setSelectedQuestion(quiz);
-                          // setOpenModal(true);
-                        }}
+                      setSelectedQuiz(quiz);
+                      setOpenModal(true);
+                    }}
                       />
                       <Trash2
                         size={24}
@@ -375,6 +378,7 @@ useEffect(() => {
        <QuizzesData
             openQuizData={openQuizData}
             setOpenQuizData={setOpenQuizData}
+              refreshQuizzes={GetFirstFiveIncomming}
           />
            {/* DeleteConfirmation */}
           <DeleteConfirmation
@@ -388,6 +392,13 @@ useEffect(() => {
               await hadeldeleteQuiz(selectedQuiz?._id || "");
             }}
           />
+           {/* StudentModal */}
+      <QuizModal
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        selectedQuiz={selectedQuiz}
+
+      />
           
     </div>
     

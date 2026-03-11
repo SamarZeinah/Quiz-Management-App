@@ -1,5 +1,23 @@
-import type { Question } from "./QuestionsInterfaces";
-
+export interface QuizOption {
+  A: string;
+  B: string;
+  C: string;
+  D: string;
+  _id: string;
+}
+// QuestionsInterfaces.ts
+export interface Question {
+    description: string;
+    answer: string;
+    status: "active" | "inactive";
+    instructor: string;
+    difficulty: "easy" | "medium" | "hard";
+    points: number;
+    type: "BE" | "FE" | "DO";
+  _id: string;
+  title: string;
+  options: QuizOption;
+}
 export interface Quiz {
   _id: string;
   code: string;
@@ -27,5 +45,12 @@ export interface QuizDataProps {
   openQuizData: boolean;
   setOpenQuizData: React.Dispatch<React.SetStateAction<boolean>>;
   onClose?: () => void;
+  refreshQuizzes:()=>void;
   
 }
+export interface QuizModalProps  {
+  openModal: boolean;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedQuiz: Quiz | null;
+  onClose?: () => void;
+};

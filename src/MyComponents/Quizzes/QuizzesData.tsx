@@ -33,6 +33,7 @@ const QuizzesData = ({
   openQuizData,
   setOpenQuizData,
   onClose,
+  refreshQuizzes,
 }: QuizDataProps) => {
   const formik = useFormik({
     enableReinitialize: true,
@@ -40,12 +41,12 @@ const QuizzesData = ({
       title: "",
       description: "",
       group: "",
-      questions_number: "",
+      questions_number: 0,
       difficulty: "",
       type: "",
       schadule: "",
       duration: "",
-      score_per_question: "",
+      score_per_question: 0,
     },
     validationSchema: Yup.object({
       title: Yup.string().required("Quiz title is required"),
@@ -61,11 +62,13 @@ const QuizzesData = ({
       console.log("values", values);
       setIsSaving(true);
       try {
+        
         const res = await axios.post(Quizzes_URLS.CREATE_QUIZ, values, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+        refreshQuizzes();
         toast({
           title: "Success",
           description: "Quiz created successfully",
