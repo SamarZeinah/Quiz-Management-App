@@ -37,8 +37,17 @@ export interface Quiz {
   createdAt: string;
   __v: number;
   closed_at: string;
-  participants: number;
+  participants?: number;
 }
+export interface Participant {
+}
+
+export interface QuizResult {
+  quiz: Quiz;
+  participants: Participant[];
+}
+
+export type QuizResultsResponse = QuizResult[];
 export type QuizResponse = Quiz[];
 
 export interface QuizDataProps {
