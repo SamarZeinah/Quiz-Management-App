@@ -7,7 +7,6 @@ import {
   CircleX,
   LayoutGrid,
   List,
-  
 } from "lucide-react";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import type { Student } from "@/Interfaces/StudentsInterfaces";
@@ -122,39 +121,6 @@ const Students = () => {
       }
     }
   };
-  //  const DeleteStudentFromGroup = async (StudentId: string,GroupId:string) => {
-
-  //   if (StudentId&&GroupId) {
-  //     try {
-  //       await axios.delete(Students_URLS.Delete_Student_From_Group(GroupId,StudentId), {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       });
-
-  //       GetAllStudentsGroup();
-
-  //       toast({
-  //         title: `Student with ID ${StudentId} deleted successfully from group with ID ${GroupId}`,
-  //         duration: 1500,
-  //       });
-  //     } catch (error) {
-  //       let description = "Failed to delete Student from group";
-  //       if (axios.isAxiosError(error)) {
-  //         const axiosError = error as AxiosError<{ message: string }>;
-  //         description = axiosError.response?.data?.message || description;
-  //       }
-  //       toast({
-  //         title: "Error",
-  //         description,
-  //         variant: "destructive",
-  //         duration: 1500,
-  //       });
-  //     } finally {
-  //       setOpenDelete(false);
-  //     }
-  //   }
-  // };
   const DeleteStudentFromGroup = async (
     StudentId: string,
     GroupId?: string,
@@ -320,16 +286,18 @@ const Students = () => {
                     Delete Student
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem
-                    className="flex gap-2 text-red-500"
-                    onClick={() => {
-                      setSelectedStudent(student);
-                      setDeleteType("fromGroup");
-                      setOpenDelete(true);
-                    }}
-                  >
-                    Remove From Group
-                  </DropdownMenuItem>
+                  {student.group?._id && (
+                    <DropdownMenuItem
+                      className="flex gap-2 text-red-500"
+                      onClick={() => {
+                        setSelectedStudent(student);
+                        setDeleteType("fromGroup");
+                        setOpenDelete(true);
+                      }}
+                    >
+                      Remove From Group
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -450,7 +418,9 @@ const Students = () => {
               {deleteType === "full" ? "delete" : "remove"}{" "}
               {selectedStudent?.first_name} {selectedStudent?.last_name}
             </span>{" "}
-            {deleteType === "full" ? "from the system?" : "from the group?"}
+            {deleteType === "full"
+              ? "from the system?"
+              : `from the group "${selectedStudent?.group?.name}"?`}
           </span>
         }
         confirmText={deleteType === "full" ? "Delete" : "Remove"}

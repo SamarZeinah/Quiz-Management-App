@@ -42,18 +42,11 @@ export default function Dashboard() {
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         },
-        
       );
       setFirstFiveIncommingQuizzes(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("Axios Error:", error.response?.data);
-        // toast({
-        //   title: "Error",
-        //   description: error.response?.data?.message || "Something went wrong",
-        //   variant: "destructive",
-        //   duration: 1500,
-        // });
       } else {
         console.log("Unexpected Error:", error);
       }
@@ -73,13 +66,6 @@ export default function Dashboard() {
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.log("Axios Error:", error.response?.data);
-          // toast({
-          //   title: "Error",
-          //   description:
-          //     error.response?.data?.message || "Something went wrong",
-          //   variant: "destructive",
-          //   duration: 1500,
-          // });
         } else {
           console.log("Unexpected Error:", error);
         }
@@ -224,8 +210,6 @@ export default function Dashboard() {
         selectedStudent={selectedStudent}
         isTopFive={isTopFive}
       />
-      
     </div>
-    
   );
 }

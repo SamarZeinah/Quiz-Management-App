@@ -11,13 +11,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import {
-  ChevronDown,
-  CirclePlus,
-  Eye,
-  SquarePen,
-  Trash2,
-} from "lucide-react";
+import { ChevronDown, CirclePlus, Eye, SquarePen, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -110,8 +104,8 @@ const QuestionsList = () => {
   const filteredQuestions = questions.filter((question) => {
     // const matchesSearch = question.title.includes(searchValue.toLowerCase());
     const matchesSearch = question.title
-  .toLowerCase()
-  .includes(searchValue.toLowerCase());
+      .toLowerCase()
+      .includes(searchValue.toLowerCase());
     const matchesDifficulty = selectedDifficulty
       ? question.difficulty === selectedDifficulty
       : true;
@@ -351,9 +345,10 @@ const QuestionsList = () => {
             </tbody>
           </table>
         </div>
+
         <p className="text-center text-gray-600 mt-4 italic">
-          Showing {currentQuestions.length} of {filteredQuestions.length}{" "}
-          questions
+          Showing {Math.min(questionPerPage, currentQuestions.length)} of{" "}
+          {filteredQuestions.length} questions
         </p>
         {/* Pagination */}
         <div className="mt-6 flex justify-center">
