@@ -27,19 +27,21 @@ import { useNavigate } from "react-router-dom";
 import QuizzesData from "./QuizzesData";
 import { DeleteConfirmation } from "../Shared_Components/DeleteConfirmation";
 import QuizModal from "./QuizModal";
+import { useAuth } from "../Context/AuthContext";
+import JoinQuizModal from "./JoinQuizModal";
 const QuizzesList = () => {
+  const { user } = useAuth();
+  const userRole = user?.role || "";
   const [loadingCompleted, setLoadingCompleted] = useState(true);
   const [loadingIncoming, setLoadingIncoming] = useState(true);
   const [lastFiveCompleted, setlastFiveComplete] = useState<Quiz[]>([]);
   const [FirstFiveIncomming, setFirstFiveIncomming] = useState<Quiz[]>([]);
-    const [openQuizData, setOpenQuizData] = useState(false);
- const [selectedQuiz, setSelectedQuiz] = useState<Quiz | null>(
-    null,
-  );
+  const [openQuizData, setOpenQuizData] = useState(false);
+  const [selectedQuiz, setSelectedQuiz] = useState<Quiz | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
-    const [openModal, setOpenModal] = useState(false);
-
-const Navigate=useNavigate();
+  const [openModal, setOpenModal] = useState(false);
+  const [openJoinModal, setOpenJoinModal] = useState(false);
+  const Navigate = useNavigate();
   console.log("lastFiveCompleted", lastFiveCompleted);
   // GetlastFiveCompleted
   const GetLastFiveCompleted = async () => {
@@ -91,101 +93,90 @@ const Navigate=useNavigate();
       }
     }
   };
-  
-// const hadeldeleteQuiz = async (quizId: string) => {
-//     console.log("Deleting Question with ID:", quizId);
-//     if (quizId) {
-//       try {
-//         await axios.delete(Quizzes_URLS.DELETE_QUIZ(quizId), {
-//           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-//         });
-//         GetFirstFiveIncomming(); // Refresh the list after deletion
-//         toast({
-//           title: `Quiz of id ${quizId} delete Successfully`,
-//           duration: 1500,
-//         });
-//       } catch (error) {
-//         let description = "Failed to delete Question";
-//         if (axios.isAxiosError(error)) {
-//           const axiosError = error as AxiosError<{ message: string }>;
-//           description = axiosError.response?.data?.message || description;
-//         }
-//         toast({
-//           title: "Error",
-//           description,
-//           variant: "destructive",
-//           duration: 1500,
-//         });
-//       } finally {
-//         setDeleteOpen(false);
-//       }
-//     }
-//   };
-const hadeldeleteQuiz = async (quizId: string) => {
-  console.log("Deleting Question with ID:", quizId);
-  if (quizId) {
-    try {
-      await axios.delete(Quizzes_URLS.DELETE_QUIZ(quizId), {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
 
-      // حدّث المصفوفة محليًا بدون loader
-      setFirstFiveIncomming((prev) =>
-        prev.filter((quiz) => quiz._id !== quizId)
-      );
+  const hadeldeleteQuiz = async (quizId: string) => {
+    console.log("Deleting Question with ID:", quizId);
+    if (quizId) {
+      try {
+        await axios.delete(Quizzes_URLS.DELETE_QUIZ(quizId), {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
 
-      toast({
-        title: `Quiz of id ${quizId} deleted Successfully`,
-        duration: 1500,
-      });
-    } catch (error) {
-      let description = "Failed to delete Question";
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError<{ message: string }>;
-        description = axiosError.response?.data?.message || description;
+        // حدّث المصفوفة محليًا بدون loader
+        setFirstFiveIncomming((prev) =>
+          prev.filter((quiz) => quiz._id !== quizId),
+        );
+
+        toast({
+          title: `Quiz of id ${quizId} deleted Successfully`,
+          duration: 1500,
+        });
+      } catch (error) {
+        let description = "Failed to delete Question";
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError<{ message: string }>;
+          description = axiosError.response?.data?.message || description;
+        }
+        toast({
+          title: "Error",
+          description,
+          variant: "destructive",
+          duration: 1500,
+        });
+      } finally {
+        setDeleteOpen(false);
       }
-      toast({
-        title: "Error",
-        description,
-        variant: "destructive",
-        duration: 1500,
-      });
-    } finally {
-      setDeleteOpen(false);
     }
-  }
-};  
-useEffect(() => {
+  };
+  useEffect(() => {
     GetLastFiveCompleted();
     GetFirstFiveIncomming();
   }, []);
   return (
     <div className="container mx-auto p-7">
       <div className="flex gap-4 mb-4">
-        <div className="group w-48 h-44 bg-gray-800 rounded-lg shadow-2xl flex flex-col items-center justify-center gap-3 text-center transition-all duration-300 hover:scale-105 hover:border hover:border-gray-600/50"
-         onClick={() => {
-              setOpenQuizData(true);
-            }}>
-          <div className="bg-gray-700/20 p-4 rounded-lg transition text-white group-hover:bg-gray-700/60">
-            <Plus />
+        {userRole !== "Student" ? (
+          <>
+            <div
+              className="group w-48 h-44 bg-gray-800 rounded-2xl shadow-2xl flex flex-col items-center justify-center gap-3 text-center transition-all duration-300 hover:scale-105 hover:border hover:border-gray-600/50"
+              onClick={() => setOpenQuizData(true)}
+            >
+              <div className="bg-gray-700/20 p-4 rounded-lg transition text-white group-hover:bg-gray-700/60">
+                <Plus />
+              </div>
+              <h1 className="text-white font-bold text-md">Create New Quiz</h1>
+              <p className="text-gray-300 text-sm">
+                Set Up Interactive Quizzes
+              </p>
+            </div>
+
+            <div
+              className="group w-48 h-44 bg-gray-800 rounded-2xl shadow-2xl flex flex-col items-center justify-center gap-3 text-center transition-all duration-300 hover:scale-105 hover:border hover:border-gray-600/50 hover:cursor-pointer"
+              onClick={() => Navigate("/dashboard/questions")}
+            >
+              <div className="bg-gray-700/20 p-4 rounded-lg transition text-white group-hover:bg-gray-700/60">
+                <BookOpen />
+              </div>
+              <h1 className="text-white font-bold text-md">Question Bank</h1>
+              <p className="text-gray-300 text-sm">Manage Your Questions</p>
+            </div>
+          </>
+        ) : (
+          <div
+            className="group w-60 h-44 bg-gray-800 rounded-2xl shadow-2xl flex flex-col items-center justify-center gap-3 text-center transition-all duration-300 hover:scale-105 hover:border hover:border-gray-600/50 hover:cursor-pointer"
+            onClick={() => setOpenJoinModal(true)}
+          >
+            <div className="bg-gray-700/20 p-4 rounded-lg transition text-white group-hover:bg-gray-700/60">
+              <Users />
+            </div>
+            <h1 className="text-white font-bold text-lg">Join Quiz</h1>
+            <p className="text-gray-300 text-sm">
+              Enter a quiz code to participate
+            </p>
           </div>
-
-          <h1 className="text-white font-bold text-md">Create New Quiz</h1>
-
-          <p className="text-gray-300 text-sm">Set Up Interactive Quizzes</p>
-        </div>
-
-        <div  className="group w-48 h-44 bg-gray-800 rounded-lg shadow-2xl flex flex-col items-center justify-center gap-3 text-center transition-all duration-300 hover:scale-105 hover:border hover:border-gray-600/50 hover:cursor-pointer"
-        onClick={()=>Navigate("/dashboard/questions")}>
-          <div className="bg-gray-700/20 p-4 rounded-lg transition text-white group-hover:bg-gray-700/60">
-            <BookOpen />
-          </div>
-
-          <h1 className="text-white font-bold text-md">Question Bank</h1>
-
-          <p className="text-gray-300 text-sm">Manage Your questions</p>
-        </div>
+        )}
       </div>
+
       <h2 className="text-2xl font-bold mb-4 text-[#111827]">
         Completed Quizzes
       </h2>
@@ -285,123 +276,129 @@ useEffect(() => {
           ))
         )}
       </div>
-      <h2 className="text-2xl font-bold mb-4 text-[#111827] mt-10">
-        Incoming Quizzes
-      </h2>
-      <div className=" shadow-lg rounded-xl overflow-hidden">
-        {loadingIncoming ? (
-          <div className="flex justify-center items-center h-40 bg-white shadow-md rounded-lg">
-            <OrbitLoader size={40} />
+      {userRole !== "Student" && (
+        <div>
+          <h2 className="text-2xl font-bold mb-4 text-[#111827] mt-10">
+            Incoming Quizzes
+          </h2>
+          <div className=" shadow-lg rounded-xl overflow-hidden">
+            {loadingIncoming ? (
+              <div className="flex justify-center items-center h-40 bg-white shadow-md rounded-lg">
+                <OrbitLoader size={40} />
+              </div>
+            ) : (
+              <table className="w-full border  border-collapse table-fixed text-white">
+                <thead className="bg-gray-700 text-white">
+                  <tr>
+                    <th className=" px-4 py-4 text-left w-1/5">Title</th>
+                    <th className=" px-4 py-4 text-left w-1/5">Description</th>
+                    <th className=" px-4 py-4 text-left w-1/5">Code</th>
+                    <th className=" px-4 py-4 text-left w-1/5">Status</th>
+                    <th className=" px-4 py-4 text-left w-1/5">Difficulty</th>
+                    <th className=" px-4 py-4 text-left w-1/5">Schedule</th>
+                    <th className=" px-4 py-4 text-left w-1/5">Actions</th>
+                  </tr>
+                </thead>
+
+                <tbody className="bg-gray-800 ">
+                  {FirstFiveIncomming.map((quiz) => (
+                    <tr key={quiz._id} className=" transition-colors">
+                      <td className=" px-4 py-4 font-bold">{quiz.title}</td>
+                      <td className=" px-4 py-4 text-sm">{quiz.description}</td>
+                      <td className=" px-4 py-2 text-sm">{quiz.code}</td>
+                      <td className="px-4 py-2 text-sm">
+                        <span
+                          className={`px-2 py-1 rounded-full text-sm font-semibold ${
+                            quiz.status === "open"
+                              ? "bg-green-800 text-white"
+                              : quiz.status === "closed"
+                                ? "bg-red-800 text-white"
+                                : "bg-gray-800 text-white"
+                          }`}
+                        >
+                          {quiz.status}
+                        </span>
+                      </td>
+                      {/* Difficulty with color */}
+                      <td className=" px-4 py-2  text-sm">
+                        <span
+                          className={`px-2 py-1 rounded-full  text-sm font-semibold ${
+                            quiz.difficulty === "easy"
+                              ? "bg-green-800 text-white"
+                              : quiz.difficulty === "medium"
+                                ? "bg-yellow-800 text-white"
+                                : quiz.difficulty === "hard"
+                                  ? "bg-red-800 text-white"
+                                  : "bg-gray-500"
+                          }`}
+                        >
+                          {quiz.difficulty}
+                        </span>
+                      </td>
+
+                      {/* Schedule */}
+                      <td className=" px-4 py-2 text-sm">
+                        {new Date(quiz.schadule).toLocaleString()}
+                      </td>
+
+                      {/* Actions */}
+                      <td className=" px-4 py-2 ">
+                        <div className="inline-flex  gap-4 w-full">
+                          <Eye
+                            size={24}
+                            className="text-blue-600 cursor-pointer transition-all duration-200 hover:text-blue-800 hover:scale-110"
+                            onClick={() => {
+                              setSelectedQuiz(quiz);
+                              setOpenModal(true);
+                            }}
+                          />
+                          <Trash2
+                            size={24}
+                            className="text-red-600 cursor-pointer transition-all duration-200 hover:text-red-800 hover:scale-110"
+                            onClick={() => {
+                              setSelectedQuiz(quiz);
+                              setDeleteOpen(true);
+                            }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
-        ) : (
-          <table className="w-full border  border-collapse table-fixed text-white">
-            <thead className="bg-gray-700 text-white">
-              <tr>
-                <th className=" px-4 py-4 text-left w-1/5">Title</th>
-                <th className=" px-4 py-4 text-left w-1/5">Description</th>
-                <th className=" px-4 py-4 text-left w-1/5">Code</th>
-                <th className=" px-4 py-4 text-left w-1/5">Status</th>
-                <th className=" px-4 py-4 text-left w-1/5">Difficulty</th>
-                <th className=" px-4 py-4 text-left w-1/5">Schedule</th>
-                <th className=" px-4 py-4 text-left w-1/5">Actions</th>
-              </tr>
-            </thead>
-
-            <tbody className="bg-gray-800 ">
-              {FirstFiveIncomming.map((quiz) => (
-                <tr key={quiz._id} className=" transition-colors">
-                  <td className=" px-4 py-4 font-bold">{quiz.title}</td>
-                  <td className=" px-4 py-4 text-sm">{quiz.description}</td>
-                  <td className=" px-4 py-2 text-sm">{quiz.code}</td>
-                  <td className="px-4 py-2 text-sm">
-                    <span
-                      className={`px-2 py-1 rounded-full text-sm font-semibold ${
-                        quiz.status === "open"
-                          ? "bg-green-800 text-white"
-                          : quiz.status === "closed"
-                            ? "bg-red-800 text-white"
-                            : "bg-gray-800 text-white"
-                      }`}
-                    >
-                      {quiz.status}
-                    </span>
-                  </td>
-                  {/* Difficulty with color */}
-                  <td className=" px-4 py-2  text-sm">
-                    <span
-                      className={`px-2 py-1 rounded-full  text-sm font-semibold ${
-                        quiz.difficulty === "easy"
-                          ? "bg-green-800 text-white"
-                          : quiz.difficulty === "medium"
-                            ? "bg-yellow-800 text-white"
-                            : quiz.difficulty === "hard"
-                              ? "bg-red-800 text-white"
-                              : "bg-gray-500"
-                      }`}
-                    >
-                      {quiz.difficulty}
-                    </span>
-                  </td>
-
-                  {/* Schedule */}
-                  <td className=" px-4 py-2 text-sm">
-                    {new Date(quiz.schadule).toLocaleString()}
-                  </td>
-
-                  {/* Actions */}
-                  <td className=" px-4 py-2 ">
-                    <div className="inline-flex  gap-4 w-full">
-                      <Eye
-                        size={24}
-                        className="text-blue-600 cursor-pointer transition-all duration-200 hover:text-blue-800 hover:scale-110"
-                        onClick={() => {
-                      setSelectedQuiz(quiz);
-                      setOpenModal(true);
-                    }}
-                      />
-                      <Trash2
-                        size={24}
-                        className="text-red-600 cursor-pointer transition-all duration-200 hover:text-red-800 hover:scale-110"
-                        onClick={() => {
-                          setSelectedQuiz(quiz);
-                          setDeleteOpen(true);
-                        }}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
-       <QuizzesData
-            openQuizData={openQuizData}
-            setOpenQuizData={setOpenQuizData}
-              refreshQuizzes={GetFirstFiveIncomming}
-          />
-           {/* DeleteConfirmation */}
-          <DeleteConfirmation
-            open={deleteOpen}
-            onOpenChange={setDeleteOpen}
-            title="Delete Quiz"
-            description={`Are you sure you want to delete the Quiz "${selectedQuiz?.title}"?`}
-            confirmText="Delete"
-            cancelText="Cancel"
-            onConfirm={async () => {
-              await hadeldeleteQuiz(selectedQuiz?._id || "");
-            }}
-          />
-           {/* StudentModal */}
+        </div>
+      )}
+      <QuizzesData
+        openQuizData={openQuizData}
+        setOpenQuizData={setOpenQuizData}
+        refreshQuizzes={GetFirstFiveIncomming}
+      />
+      {/* DeleteConfirmation */}
+      <DeleteConfirmation
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        title="Delete Quiz"
+        description={`Are you sure you want to delete the Quiz "${selectedQuiz?.title}"?`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={async () => {
+          await hadeldeleteQuiz(selectedQuiz?._id || "");
+        }}
+      />
+      {/* StudentModal */}
       <QuizModal
         openModal={openModal}
         setOpenModal={setOpenModal}
         selectedQuiz={selectedQuiz}
-
       />
-          
+      <JoinQuizModal
+        isOpen={openJoinModal}
+        setIsOpen={setOpenJoinModal}
+        onJoined={() => console.log("Quiz joined!")}
+      />
     </div>
-    
   );
 };
 

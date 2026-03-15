@@ -17,8 +17,10 @@ import QuestionsList from './MyComponents/Questions/QuestionsList'
 import Quizzes from './MyComponents/Quizzes/QuizzesList'
 import Results from './MyComponents/Results/Results'
 import GroupsList from './MyComponents/Groups/GroupsList'
+import QuizAttempt from './MyComponents/Quizzes/QuizAttempt'
 
 function App() {
+  
  const routes=createBrowserRouter([
 {
   path:"",
@@ -49,6 +51,7 @@ function App() {
         { path: "groups", element: <GroupsList /> },
         { path: "quizzes", element: <Quizzes /> },
         { path: "results", element: <Results /> },
+        { path: "quiz/:quizId", element: <QuizAttempt /> }, 
       ],
     },
   ]);
