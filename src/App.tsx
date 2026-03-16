@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createHashRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
 import AuthLayout from './MyComponents/Shared_Components/AuthLayout'
 import Login from './MyComponents/Authentication/Login'
@@ -21,7 +21,7 @@ import QuizAttempt from './MyComponents/Quizzes/QuizAttempt'
 
 function App() {
   
- const routes=createBrowserRouter([
+ const routes=createHashRouter([
 {
   path:"",
   element:<AuthLayout/>,

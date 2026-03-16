@@ -1,16 +1,9 @@
-// import axios from "axios";
 
-export const baseUrl="/api";
+export const baseUrl = import.meta.env.MODE === 'development' 
+  ? '/api' 
+  : 'https://upskilling-egypt.com:3005/api';
 export const Photo_baseUrl="https://upskilling-egypt.com:3006";
-//public    Dont need Token
-// export const publicAxiosInstance=axios.create({
-//     baseURL:baseUrl,
-// })
-//private   need Token after login
-// export const privateAxiosInstance=axios.create({
-//     baseURL:baseUrl,
-//     headers: { Authorization: localStorage.getItem('token') }
-// })
+
 export const Auth_URLS={
     LOGIN:`${baseUrl}/auth/login`,
     REGISTER:`${baseUrl}/auth/register`,
