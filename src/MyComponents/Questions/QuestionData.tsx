@@ -322,7 +322,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Book, ChevronDown, Settings } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { QuestionDataProps } from "@/Interfaces/QuestionsInterfaces";
 import { Questions_URLS } from "../Services/Urls";
 import axios from "axios";
@@ -335,7 +335,6 @@ const QuestionData = ({
   setOpenQuestionData,
   selectedQuestion,
   getAllQuestions,
-  onClose,
 }: QuestionDataProps) => {
   const [isSaving, setIsSaving] = useState(false);
 

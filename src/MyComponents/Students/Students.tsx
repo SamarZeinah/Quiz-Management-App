@@ -195,7 +195,7 @@ const Students = () => {
                 onClick={() => setStudentsPerPage(num)}
                 className={`flex items-center justify-center px-5 py-2 text-sm font-medium transition ${
                   studentsPerPage === num
-                    ? "bg-primary text-white"
+                    ? "bg-gray-800 text-white"
                     : "bg-white text-gray-600 hover:bg-gray-100"
                 }`}
               >
@@ -209,7 +209,7 @@ const Students = () => {
               onClick={() => setViewMode("grid")}
               className={`flex items-center gap-2 px-5 py-2 text-sm font-medium transition ${
                 viewMode === "grid"
-                  ? "bg-primary text-white"
+                  ? "bg-gray-800 text-white"
                   : "bg-white text-gray-600 hover:bg-gray-100"
               }`}
             >
@@ -220,7 +220,7 @@ const Students = () => {
               onClick={() => setViewMode("list")}
               className={`flex items-center gap-2 px-5 py-2 text-sm font-medium transition ${
                 viewMode === "list"
-                  ? "bg-primary text-white"
+                  ? "bg-gray-800 text-white"
                   : "bg-white text-gray-600 hover:bg-gray-100"
               }`}
             >
@@ -241,7 +241,13 @@ const Students = () => {
           <div className="col-span-full flex items-center justify-center min-h-[60vh]">
             <PacmanLoader color="#16a34a" size={40} />
           </div>
-        ) : (
+        ) : currentStudents.length === 0 ? (
+          <div className="flex justify-center items-center h-40 bg-white shadow-md rounded-lg">
+            <p className="text-gray-500 text-lg font-semibold">
+              No students available
+            </p>
+          </div>
+        ) :(
           currentStudents.map((student) => (
             <div
               key={student._id}
@@ -255,7 +261,7 @@ const Students = () => {
                 onOpenChange={(open) => handleDropdownChange(student._id, open)}
               >
                 <DropdownMenuTrigger asChild>
-                  <button className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-black text-white hover:bg-gray-800 transition">
+                  <button className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-gray-800 text-white hover:bg-gray-800 transition">
                     <ChevronRight
                       className={`w-5 h-5 transition-transform duration-300 ${
                         openDropdowns[student._id] ? "rotate-90" : "rotate-0"
@@ -266,7 +272,7 @@ const Students = () => {
 
                 <DropdownMenuContent align="end" className="w-40">
                   <DropdownMenuItem
-                    className="flex gap-2"
+                    className="flex gap-2 text-gray-800"
                     onClick={() => {
                       setSelectedStudent(student);
                       setOpenModal(true);
