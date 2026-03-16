@@ -29,7 +29,7 @@ const QuestionsList = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   console.log(questions);
   const [currentPage, setCurrentPage] = useState(1);
-  const [questionPerPage, setQuestionsPerPage] = useState(6);
+  const [questionPerPage] = useState(6);
   const [searchValue, setSearchValue] = useState<string>("");
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string>("");
