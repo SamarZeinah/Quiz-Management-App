@@ -32,7 +32,6 @@ import { toast } from "@/hooks/use-toast";
 const QuizzesData = ({
   openQuizData,
   setOpenQuizData,
-  onClose,
   refreshQuizzes,
 }: QuizDataProps) => {
   const formik = useFormik({
@@ -103,7 +102,7 @@ const QuizzesData = ({
     },
   });
   const [groups, setGroups] = useState<GroupData[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
   const [time, setTime] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [createdQuizCode, setCreatedQuizCode] = useState<string | null>(null);
@@ -111,14 +110,14 @@ const QuizzesData = ({
   const [copied, setCopied] = useState(false);
   const fetchGroupData = async () => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const res = await axios.get(Groups_URLS.GET_GROUPS, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       setGroups(res.data);
-      setLoading(false);
+      // setLoading(false);
       console.log("Groups Data:", res.data);
     } catch (error) {
       console.error("Failed to fetch groups:", error);

@@ -45,7 +45,7 @@ const handleChangePassword = () => {
       {/* Left */}
       <div className="flex items-center gap-4">
         <SidebarTrigger />
-        <h1 className="text-xl font-bold">{pageTitle}</h1>
+        <h1 className="text-2xl font-bold text-gray-800">{pageTitle}</h1>
       </div>
 
       {/* Right */}
@@ -57,7 +57,7 @@ const handleChangePassword = () => {
             </div>
 
             <div className="flex flex-col text-center">
-              <span className="font-semibold">{userName}</span>
+              <span className="font-semibold text-gray-800">{userName}</span>
               <span className="text-sm text-green-700">{userRole}</span>
             </div>
 
@@ -66,8 +66,8 @@ const handleChangePassword = () => {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="w-52" sideOffset={15}>
-          <DropdownMenuItem onClick={handleChangePassword} className="flex gap-3">
-            <KeyRound className="w-5 h-5" />
+          <DropdownMenuItem onClick={handleChangePassword} className="flex gap-3 text-gray-800">
+            <KeyRound className="w-5 h-5 text-gray-800" />
             Change Password
           </DropdownMenuItem>
 

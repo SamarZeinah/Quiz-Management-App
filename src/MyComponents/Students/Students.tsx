@@ -7,7 +7,6 @@ import {
   CircleX,
   LayoutGrid,
   List,
-  
 } from "lucide-react";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import type { Student } from "@/Interfaces/StudentsInterfaces";
@@ -122,39 +121,6 @@ const Students = () => {
       }
     }
   };
-  //  const DeleteStudentFromGroup = async (StudentId: string,GroupId:string) => {
-
-  //   if (StudentId&&GroupId) {
-  //     try {
-  //       await axios.delete(Students_URLS.Delete_Student_From_Group(GroupId,StudentId), {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       });
-
-  //       GetAllStudentsGroup();
-
-  //       toast({
-  //         title: `Student with ID ${StudentId} deleted successfully from group with ID ${GroupId}`,
-  //         duration: 1500,
-  //       });
-  //     } catch (error) {
-  //       let description = "Failed to delete Student from group";
-  //       if (axios.isAxiosError(error)) {
-  //         const axiosError = error as AxiosError<{ message: string }>;
-  //         description = axiosError.response?.data?.message || description;
-  //       }
-  //       toast({
-  //         title: "Error",
-  //         description,
-  //         variant: "destructive",
-  //         duration: 1500,
-  //       });
-  //     } finally {
-  //       setOpenDelete(false);
-  //     }
-  //   }
-  // };
   const DeleteStudentFromGroup = async (
     StudentId: string,
     GroupId?: string,
@@ -229,7 +195,7 @@ const Students = () => {
                 onClick={() => setStudentsPerPage(num)}
                 className={`flex items-center justify-center px-5 py-2 text-sm font-medium transition ${
                   studentsPerPage === num
-                    ? "bg-primary text-white"
+                    ? "bg-gray-800 text-white"
                     : "bg-white text-gray-600 hover:bg-gray-100"
                 }`}
               >
@@ -243,7 +209,7 @@ const Students = () => {
               onClick={() => setViewMode("grid")}
               className={`flex items-center gap-2 px-5 py-2 text-sm font-medium transition ${
                 viewMode === "grid"
-                  ? "bg-primary text-white"
+                  ? "bg-gray-800 text-white"
                   : "bg-white text-gray-600 hover:bg-gray-100"
               }`}
             >
@@ -254,7 +220,7 @@ const Students = () => {
               onClick={() => setViewMode("list")}
               className={`flex items-center gap-2 px-5 py-2 text-sm font-medium transition ${
                 viewMode === "list"
-                  ? "bg-primary text-white"
+                  ? "bg-gray-800 text-white"
                   : "bg-white text-gray-600 hover:bg-gray-100"
               }`}
             >
@@ -275,7 +241,13 @@ const Students = () => {
           <div className="col-span-full flex items-center justify-center min-h-[60vh]">
             <PacmanLoader color="#16a34a" size={40} />
           </div>
-        ) : (
+        ) : currentStudents.length === 0 ? (
+          <div className="flex justify-center items-center h-40 bg-white shadow-md rounded-lg">
+            <p className="text-gray-500 text-lg font-semibold">
+              No students available
+            </p>
+          </div>
+        ) :(
           currentStudents.map((student) => (
             <div
               key={student._id}
@@ -289,7 +261,7 @@ const Students = () => {
                 onOpenChange={(open) => handleDropdownChange(student._id, open)}
               >
                 <DropdownMenuTrigger asChild>
-                  <button className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-black text-white hover:bg-gray-800 transition">
+                  <button className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-gray-800 text-white hover:bg-gray-800 transition">
                     <ChevronRight
                       className={`w-5 h-5 transition-transform duration-300 ${
                         openDropdowns[student._id] ? "rotate-90" : "rotate-0"
@@ -300,7 +272,7 @@ const Students = () => {
 
                 <DropdownMenuContent align="end" className="w-40">
                   <DropdownMenuItem
-                    className="flex gap-2"
+                    className="flex gap-2 text-gray-800"
                     onClick={() => {
                       setSelectedStudent(student);
                       setOpenModal(true);
@@ -320,16 +292,18 @@ const Students = () => {
                     Delete Student
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem
-                    className="flex gap-2 text-red-500"
-                    onClick={() => {
-                      setSelectedStudent(student);
-                      setDeleteType("fromGroup");
-                      setOpenDelete(true);
-                    }}
-                  >
-                    Remove From Group
-                  </DropdownMenuItem>
+                  {student.group?._id && (
+                    <DropdownMenuItem
+                      className="flex gap-2 text-red-500"
+                      onClick={() => {
+                        setSelectedStudent(student);
+                        setDeleteType("fromGroup");
+                        setOpenDelete(true);
+                      }}
+                    >
+                      Remove From Group
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -450,7 +424,9 @@ const Students = () => {
               {deleteType === "full" ? "delete" : "remove"}{" "}
               {selectedStudent?.first_name} {selectedStudent?.last_name}
             </span>{" "}
-            {deleteType === "full" ? "from the system?" : "from the group?"}
+            {deleteType === "full"
+              ? "from the system?"
+              : `from the group "${selectedStudent?.group?.name}"?`}
           </span>
         }
         confirmText={deleteType === "full" ? "Delete" : "Remove"}

@@ -11,13 +11,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import {
-  ChevronDown,
-  CirclePlus,
-  Eye,
-  SquarePen,
-  Trash2,
-} from "lucide-react";
+import { ChevronDown, CirclePlus, Eye, SquarePen, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -30,6 +24,7 @@ import { DeleteConfirmation } from "../Shared_Components/DeleteConfirmation";
 import { toast } from "@/hooks/use-toast";
 import QuestionData from "./QuestionData";
 import QuestionModal from "./QuestionModal";
+import OrbitLoader from "../Shared_Components/OrbitLoader";
 const QuestionsList = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   console.log(questions);
@@ -44,10 +39,11 @@ const QuestionsList = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [openQuestionData, setOpenQuestionData] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleDifficultySelect = (value: string) => {
-    setSelectedDifficulty(value); // حفظ القيمة
-    setCurrentPage(1); // إعادة الصفحة الأولى بعد الفلترة
+    setSelectedDifficulty(value);
+    setCurrentPage(1);
   };
   const handleTypeSelect = (value: string) => {
     setSelectedType(value);
@@ -56,6 +52,7 @@ const QuestionsList = () => {
 
   // GetAllQuestions
   const getAllQuestions = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(Questions_URLS.GET_All_QUESTIONS, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -71,6 +68,8 @@ const QuestionsList = () => {
       } else {
         console.log("Unknown Error:", error);
       }
+    } finally {
+      setLoading(false);
     }
   };
   // hadeldeleteQuestion
@@ -110,8 +109,8 @@ const QuestionsList = () => {
   const filteredQuestions = questions.filter((question) => {
     // const matchesSearch = question.title.includes(searchValue.toLowerCase());
     const matchesSearch = question.title
-  .toLowerCase()
-  .includes(searchValue.toLowerCase());
+      .toLowerCase()
+      .includes(searchValue.toLowerCase());
     const matchesDifficulty = selectedDifficulty
       ? question.difficulty === selectedDifficulty
       : true;
@@ -135,12 +134,23 @@ const QuestionsList = () => {
   return (
     <>
       <div className="container p-6 mx-auto">
-        <div className="flex justify-between items-center bg-black px-4 py-[30px] rounded-lg shadow">
+        <div className="flex justify-between items-center bg-gray-800 px-4 py-[30px] rounded-lg shadow">
           <h2 className="text-white text-3xl font-bold">Bank Question</h2>
 
-          <Button
+          {/* <Button
             className="group flex items-center gap-3 bg-gray-800 text-white rounded-full px-6 py-6 text-lg font-semibold shadow-md shadow-gray-700
                    hover:bg-gray-700 hover:scale-105 transition-all duration-200"
+            onClick={() => {
+              setSelectedQuestion(null);
+              setOpenQuestionData(true);
+            }}
+          >
+            <CirclePlus className="w-8 h-8 transition-transform duration-200 group-hover:rotate-90" />
+            Add Question
+          </Button> */}
+          <Button
+            className="group flex items-center gap-3 bg-gray-700 text-white rounded-full px-6 py-6 text-lg font-semibold shadow-md shadow-black/50
+             hover:bg-gray-600 hover:scale-105 transition-all duration-200"
             onClick={() => {
               setSelectedQuestion(null);
               setOpenQuestionData(true);
@@ -262,7 +272,7 @@ const QuestionsList = () => {
       <div className="container mx-auto p-6">
         <div className="bg-white shadow-lg rounded-xl overflow-hidden">
           <table className="w-full border border-gray-300 border-collapse table-fixed">
-            <thead className="bg-black text-white">
+            <thead className="bg-gray-800 text-white">
               <tr>
                 <th className="border border-gray-300 px-4 py-4 text-left w-1/5">
                   Title
@@ -283,77 +293,88 @@ const QuestionsList = () => {
             </thead>
 
             <tbody className="bg-white">
-              {currentQuestions.map((question) => (
-                <tr
-                  key={question._id}
-                  className="hover:bg-gray-50 transition-colors"
-                >
-                  <td className="border border-gray-300 px-4 py-4 truncate">
-                    {question.title}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-4 truncate">
-                    {question.description}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    <span
-                      className={`px-2 py-1 rounded-full  text-sm font-semibold ${
-                        question.difficulty === "easy"
-                          ? "bg-green-100 text-green-800"
-                          : question.difficulty === "medium"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : question.difficulty === "hard"
-                              ? "bg-red-100 text-red-800"
-                              : "bg-gray-500"
-                      }`}
-                    >
-                      {question.difficulty}
-                    </span>
-                  </td>
-
-                  <td className="border border-gray-300 px-4 py-2">
-                    <span className="px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-sm font-semibold">
-                      {question.type}
-                    </span>
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center">
-                    <div className="inline-flex items-center justify-center gap-4 w-full">
-                      <Eye
-                        size={24}
-                        className="text-blue-600 cursor-pointer transition-all duration-200 hover:text-blue-800 hover:scale-110"
-                        onClick={() => {
-                          setSelectedQuestion(question);
-                          setOpenModal(true);
-                        }}
-                      />
-                      <SquarePen
-                        size={24}
-                        className="text-yellow-600 cursor-pointer transition-all duration-200 hover:text-yellow-800 hover:scale-110"
-                        onClick={() => {
-                          setSelectedQuestion(question);
-                          setOpenQuestionData(true);
-                        }}
-                      />
-                      <Trash2
-                        size={24}
-                        className="text-red-600 cursor-pointer 
-                        transition-all duration-200 
-                        hover:text-red-800 
-                        hover:scale-110"
-                        onClick={() => {
-                          setSelectedQuestion(question);
-                          setDeleteOpen(true);
-                        }}
-                      />
+              {loading ? (
+                <tr>
+                  <td colSpan={8}>
+                    <div className="flex justify-center items-center h-64">
+                      <OrbitLoader size={60} />
                     </div>
                   </td>
                 </tr>
-              ))}
+              ) : (
+                currentQuestions.map((question) => (
+                  <tr
+                    key={question._id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="border border-gray-300 px-4 py-4 truncate">
+                      {question.title}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-4 truncate">
+                      {question.description}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      <span
+                        className={`px-2 py-1 rounded-full  text-sm font-semibold ${
+                          question.difficulty === "easy"
+                            ? "bg-green-100 text-green-800"
+                            : question.difficulty === "medium"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : question.difficulty === "hard"
+                                ? "bg-red-100 text-red-800"
+                                : "bg-gray-500"
+                        }`}
+                      >
+                        {question.difficulty}
+                      </span>
+                    </td>
+
+                    <td className="border border-gray-300 px-4 py-2">
+                      <span className="px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-sm font-semibold">
+                        {question.type}
+                      </span>
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-center">
+                      <div className="inline-flex items-center justify-center gap-4 w-full">
+                        <Eye
+                          size={24}
+                          className="text-blue-600 cursor-pointer transition-all duration-200 hover:text-blue-800 hover:scale-110"
+                          onClick={() => {
+                            setSelectedQuestion(question);
+                            setOpenModal(true);
+                          }}
+                        />
+                        <SquarePen
+                          size={24}
+                          className="text-yellow-600 cursor-pointer transition-all duration-200 hover:text-yellow-800 hover:scale-110"
+                          onClick={() => {
+                            setSelectedQuestion(question);
+                            setOpenQuestionData(true);
+                          }}
+                        />
+                        <Trash2
+                          size={24}
+                          className="text-red-600 cursor-pointer 
+                        transition-all duration-200 
+                        hover:text-red-800 
+                        hover:scale-110"
+                          onClick={() => {
+                            setSelectedQuestion(question);
+                            setDeleteOpen(true);
+                          }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
+
         <p className="text-center text-gray-600 mt-4 italic">
-          Showing {currentQuestions.length} of {filteredQuestions.length}{" "}
-          questions
+          Showing {Math.min(questionPerPage, currentQuestions.length)} of{" "}
+          {filteredQuestions.length} questions
         </p>
         {/* Pagination */}
         <div className="mt-6 flex justify-center">

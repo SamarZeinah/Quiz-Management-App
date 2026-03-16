@@ -27,9 +27,9 @@ const GroupsList = () => {
   const [groups, setGroups] = useState<GroupData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false);
-const [selectedGroup, setSelectedGroup] = useState<GroupData | null>(null);
-const [deleteOpen, setDeleteOpen] = useState(false);
-    // const navigate=useNavigate();
+  const [selectedGroup, setSelectedGroup] = useState<GroupData | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  // const navigate=useNavigate();
 
   // fetchGroupData
   const fetchGroupData = async () => {
@@ -56,7 +56,7 @@ const [deleteOpen, setDeleteOpen] = useState(false);
     console.log("Deleting group with ID:", groupId);
     if (groupId) {
       try {
-         await axios.delete(Groups_URLS.DELETE_GROUPS(groupId), {
+        await axios.delete(Groups_URLS.DELETE_GROUPS(groupId), {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -78,10 +78,9 @@ const [deleteOpen, setDeleteOpen] = useState(false);
           variant: "destructive",
           duration: 1500,
         });
+      } finally {
+        setDeleteOpen(false);
       }
-      finally {
-      setDeleteOpen(false); 
-    }
     }
   };
 
@@ -89,18 +88,16 @@ const [deleteOpen, setDeleteOpen] = useState(false);
     <div className="container mx-auto p-6">
       {/* Add Group Button */}
       <div className="flex justify-end mb-5">
-        
         <Button
-          className="flex items-center gap-2 rounded-full px-6 py-3"
+          className="flex items-center gap-2 rounded-full px-6 py-3 bg-gray-800  hover:scale-105 transition-all duration-200"
           onClick={() => {
-            setSelectedGroup(null); 
+            setSelectedGroup(null);
             setOpenModal(true);
           }}
         >
           <CirclePlus className="w-6 h-6" />
           Add Group
         </Button>
-
       </div>
 
       {/* Groups Grid */}
@@ -155,7 +152,7 @@ const [deleteOpen, setDeleteOpen] = useState(false);
 
                 <span className="text-sm text-gray-600 text-right">
                   {Math.round(
-                    (group.students.length / group.max_students) * 100
+                    (group.students.length / group.max_students) * 100,
                   )}
                   % filled
                 </span>
@@ -164,52 +161,50 @@ const [deleteOpen, setDeleteOpen] = useState(false);
               <CardFooter className="flex flex-row gap-4 justify-end">
                 <div className="flex items-center gap-1 text-blue-600">
                   <SquarePen className="w-4 h-4" />
-                  <Button className="p-0 text-blue-600 bg-transparent border-0 shadow-none"
-                  onClick={() => {
+                  <Button
+                    className="p-0 text-blue-600 bg-transparent border-0 shadow-none"
+                    onClick={() => {
                       setSelectedGroup(group);
                       setOpenModal(true);
-                    }}>
+                    }}
+                  >
                     Edit
                   </Button>
-                
                 </div>
-                    <Button className="p-0 text-red-600 bg-transparent border-0 shadow-none"
-                    onClick={()=>{
-                      setSelectedGroup(group);
+                <Button
+                  className="p-0 text-red-600 bg-transparent border-0 shadow-none"
+                  onClick={() => {
+                    setSelectedGroup(group);
                     setDeleteOpen(true);
-
-                    }}>
-                      <Trash2 className="w-4 h-4" /> Delete
-                    </Button>
+                  }}
+                >
+                  <Trash2 className="w-4 h-4" /> Delete
+                </Button>
               </CardFooter>
             </Card>
           ))
         )}
       </div>
-    
- 
-<GroupModal
-  openModal={openModal}
-  setOpenModal={setOpenModal}
-  selectedGroup={selectedGroup}
-  onClose={() => fetchGroupData()}
-  
-/>
-<DeleteConfirmation
-        open={deleteOpen}                
+
+      <GroupModal
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        selectedGroup={selectedGroup}
+        onClose={() => fetchGroupData()}
+      />
+      <DeleteConfirmation
+        open={deleteOpen}
         onOpenChange={setDeleteOpen}
-      title="Delete Group"
-      description={`Are you sure you want to delete ${selectedGroup?.name} Group?`}
-      confirmText="Delete"
-      cancelText="Cancel"
-      onConfirm={async () => {
-        await handleDeleteGroup(selectedGroup?._id || "");
-      }}
-    />
-
-</div>
+        title="Delete Group"
+        description={`Are you sure you want to delete ${selectedGroup?.name} Group?`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={async () => {
+          await handleDeleteGroup(selectedGroup?._id || "");
+        }}
+      />
+    </div>
   );
-
 };
 
 export default GroupsList;

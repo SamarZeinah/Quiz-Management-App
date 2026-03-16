@@ -50,10 +50,10 @@ const Results = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4 text-[#111827]">All Result</h2>
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">All Result</h2>
       <div className="bg-white shadow-lg rounded-xl overflow-hidden mt-4">
         <table className="w-full border border-gray-300 border-collapse table-fixed">
-          <thead className="bg-black text-white">
+          <thead className="bg-gray-800 text-white">
             <tr>
               <th className="border border-gray-300 px-4 py-4 text-left w-1/5">
                 Quiz Title
@@ -143,10 +143,10 @@ const Results = () => {
       </div>
       {userRole !== "Student" &&(
       <div>
-        <h2 className="text-2xl font-bold my-4 text-[#111827]">All Quizzes</h2>
+        <h2 className="text-2xl font-bold my-4 text-gray-800">All Quizzes</h2>
         <div className="bg-white shadow-lg rounded-xl overflow-hidden mt-4">
           <table className="w-full border border-gray-300 border-collapse table-fixed">
-            <thead className="bg-black text-white">
+            <thead className="bg-gray-800 text-white">
               <tr>
                 <th className="border border-gray-300 px-4 py-4 text-left w-1/5">
                   Quiz Title

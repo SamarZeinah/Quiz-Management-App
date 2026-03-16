@@ -2,7 +2,6 @@ import type { QuizzesResponse } from "@/Interfaces/DashboardInterfaces";
 import axios from "axios";
 import { Quizzes_URLS, Students_URLS } from "../Services/Urls";
 import { useEffect, useState } from "react";
-import { toast } from "@/hooks/use-toast";
 import { MoveRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import type { Student } from "@/Interfaces/StudentsInterfaces";
@@ -42,18 +41,11 @@ export default function Dashboard() {
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         },
-        
       );
       setFirstFiveIncommingQuizzes(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("Axios Error:", error.response?.data);
-        // toast({
-        //   title: "Error",
-        //   description: error.response?.data?.message || "Something went wrong",
-        //   variant: "destructive",
-        //   duration: 1500,
-        // });
       } else {
         console.log("Unexpected Error:", error);
       }
@@ -73,13 +65,6 @@ export default function Dashboard() {
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.log("Axios Error:", error.response?.data);
-          // toast({
-          //   title: "Error",
-          //   description:
-          //     error.response?.data?.message || "Something went wrong",
-          //   variant: "destructive",
-          //   duration: 1500,
-          // });
         } else {
           console.log("Unexpected Error:", error);
         }
@@ -97,7 +82,7 @@ export default function Dashboard() {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
       {/* Left Side */}
       <div className="relative">
-        <h2 className="text-xl font-semibold mb-4">Upcoming 5 Quizzes</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">Upcoming 5 Quizzes</h2>
 
         {loadingQuizzes ? (
           <div className="flex justify-center items-center h-40 bg-white shadow-md rounded-lg">
@@ -121,14 +106,14 @@ export default function Dashboard() {
                   <h3 className="text-lg font-semibold">{quiz.title}</h3>
 
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold text-gray-900">
+                    <span className="font-semibold text-gray-800">
                       Scheduled:
                     </span>{" "}
                     Saturday, February 28, 2026 at 05:34 PM
                   </p>
 
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold text-gray-900">
+                    <span className="font-semibold text-gray-800">
                       Enrolled:
                     </span>{" "}
                     {quiz.participants} students
@@ -147,7 +132,7 @@ export default function Dashboard() {
           className="text-lg italic font-semibold mb-4 flex items-center gap-2 mt-4 cursor-pointer group"
           onClick={() => Navigate("/dashboard/quizzes")}
         >
-          <span className="transition-transform duration-300 group-hover:translate-x-2">
+          <span className="transition-transform duration-300 group-hover:translate-x-2 text-gray-800">
             View Quiz directory
           </span>
           <MoveRight className="transition-transform duration-300 group-hover:translate-x-2" />
@@ -157,7 +142,7 @@ export default function Dashboard() {
       {/* Right Side */}
       {userRole !== "Student" && (
         <div>
-          <h2 className="text-xl font-semibold mb-4">Top 5 Students</h2>
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">Top 5 Students</h2>
           {loadingStudents ? (
             <div className="flex justify-center items-center h-40 bg-white shadow-md rounded-lg">
               <OrbitLoader size={40} />
@@ -199,7 +184,7 @@ export default function Dashboard() {
                       setOpenModal(true);
                     }}
                   >
-                    <MoveRight className="bg-black rounded-full text-white p-1" />
+                    <MoveRight className="bg-gray-800 rounded-full text-white p-1" />
                   </div>
                 </div>
               ))}
@@ -209,7 +194,7 @@ export default function Dashboard() {
             className="text-lg italic font-semibold mb-4 flex items-center gap-2 mt-4 cursor-pointer group"
             onClick={() => Navigate("/dashboard/students")}
           >
-            <span className="transition-transform duration-300 group-hover:translate-x-2">
+            <span className="transition-transform duration-300 group-hover:translate-x-2 text-gray-800">
               View All Students
             </span>
             <MoveRight className="transition-transform duration-300 group-hover:translate-x-2" />
@@ -224,8 +209,6 @@ export default function Dashboard() {
         selectedStudent={selectedStudent}
         isTopFive={isTopFive}
       />
-      
     </div>
-    
   );
 }

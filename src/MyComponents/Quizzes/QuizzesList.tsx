@@ -102,7 +102,6 @@ const QuizzesList = () => {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
 
-        // حدّث المصفوفة محليًا بدون loader
         setFirstFiveIncomming((prev) =>
           prev.filter((quiz) => quiz._id !== quizId),
         );
