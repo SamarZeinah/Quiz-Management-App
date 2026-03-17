@@ -9,3 +9,11 @@ export interface User {
   email: string;
   role: string;
 }
+export interface RegisterValues {
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  role: string;
+  
+}
