@@ -197,7 +197,7 @@ const QuizzesData = ({
                 {groups.map((group) => (
                   <DropdownMenuItem
                     key={group._id}
-                    onClick={() => formik.setFieldValue("group", group._id)}
+                    onClick={() => formik.setFieldValue("group", group.name)}
                   >
                     {group.name}
                   </DropdownMenuItem>
