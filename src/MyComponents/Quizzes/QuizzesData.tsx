@@ -61,7 +61,6 @@ const QuizzesData = ({
       console.log("values", values);
       setIsSaving(true);
       try {
-        
         const res = await axios.post(Quizzes_URLS.CREATE_QUIZ, values, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -179,11 +178,13 @@ const QuizzesData = ({
             <label className="text-sm font-medium mb-1">Group Name</label>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
+               
                 <Button
                   variant="outline"
                   className="w-full flex justify-between"
                 >
-                  {formik.values.group || "Select Group Name"}
+                  {groups.find((g) => g._id === formik.values.group)?.name ||
+                    "Select Group Name"}
                   <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -197,7 +198,7 @@ const QuizzesData = ({
                 {groups.map((group) => (
                   <DropdownMenuItem
                     key={group._id}
-                    onClick={() => formik.setFieldValue("group", group.name)}
+                    onClick={() => formik.setFieldValue("group", group._id)}
                   >
                     {group.name}
                   </DropdownMenuItem>
