@@ -97,4 +97,4 @@ This application provides a complete platform where:
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/your-username/quiz-app.git
+git clone https://github.com/SamarZeinah/Quiz-Management-App
