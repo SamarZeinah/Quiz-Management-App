@@ -3,6 +3,11 @@
 A full-featured **Quiz Management System** built with **React (Vite + TypeScript)**, designed for both **instructors and students** to manage and participate in quizzes efficiently.
 
 ---
+<div align="center">
+  <a href="https://quizvibe.netlify.app/#/login" target="_blank">
+    <img alt="Live Demo" src="https://img.shields.io/badge/Live_Demo-ff7a00?style=for-the-badge&logo=vercel&logoColor=white"/>
+  </a>
+</div>
 
 ## 🚀 Overview
 
@@ -77,7 +82,19 @@ This application provides a complete platform where:
 - 🎛️ Radix UI + Lucide Icons  
 
 ---
+## 📁 Project Structure
 
-## 📡 API
+- Authentication Module  
+- Dashboard Module  
+- Students Module  
+- Groups Module  
+- Questions Module  
+- Quizzes Module  
+- Results Module  
 
-Backend API:
+---
+## 🚀 Getting Started
+
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/your-username/quiz-app.git
