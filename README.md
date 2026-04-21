@@ -95,6 +95,6 @@ This application provides a complete platform where:
 ---
 ## 🚀 Getting Started
 
-### 1️⃣ Clone the repository
+### Clone the repository
 ```bash
 git clone https://github.com/SamarZeinah/Quiz-Management-App
